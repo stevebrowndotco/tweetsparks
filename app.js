@@ -3,6 +3,7 @@
 // Express vars
 
 var express = require('express')
+    , routes = require('./routes')
     , http = require('http')
     , path = require('path')
     , ntwitter = require('ntwitter')
@@ -13,41 +14,66 @@ var mongo = require('mongodb')
     , mongoServer = new mongo.Server('localhost', 27017)
     , db = new mongo.Db('tweetData', mongoServer)
 
-// Socket.io Vars
-
-var socketApp = require('express').createServer()
-    , io = require('socket.io').listen(app);
-
-socketApp.listen(server);
-
 // App Vars
 
 var app = express();
 
 var server = http.createServer(app);
 
-app.configure(function () {
+// Socket.io Vars
+
+var io = require('socket.io').listen(server);
+
+//
+
+app.configure(function(){
     app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
     app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser('secretsession'));
     app.use(express.session());
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function () {
     app.use(express.errorHandler());
 });
 
+app.get('/', routes.index);
+
 // Let's go
 
 function init() {
 
+    console.log(app.settings.env);
     console.log("Getting Tweet Data");
 
-    var twit = new ntwitter({
-        consumer_key:'6FzFeYv6LDFHXemQxj54Q',
-        consumer_secret:'yn5IH7tiJiAfFVoXD6tEncx84obCRcU4MeuHKy2FdTE',
-        access_token_key:'719832314-3ujUuM4hTKZbXZLlQoo3lrckaDmCW9exKudfZFfJ',
-        access_token_secret:'LBwQrWvpGKw6d2CrUzUOZ0ygt44ZnggLDXKu6tRH36k'
-    });
+    if ( app.settings.env == 'development') {
+
+        var twit = new ntwitter({
+            consumer_key:'cy9k3PN1bL9zqXR9rZJ6Fw',
+            consumer_secret:'wsQhQrDAbfJousnjO0XSfBgdqiOFwhieejKBc6Qsk',
+            access_token_key:'719832314-c0bDUILSAh7l7oSXgSTZbqZbMVrBPfwSTbyaJUfd',
+            access_token_secret:'wQs4X0GWhPf3mQCzkDHpuD6UES5R3wvdWLLJXLBM'
+        });
+
+    } else {
+
+        var twit = new ntwitter({
+            consumer_key:'6FzFeYv6LDFHXemQxj54Q',
+            consumer_secret:'yn5IH7tiJiAfFVoXD6tEncx84obCRcU4MeuHKy2FdTE',
+            access_token_key:'719832314-3ujUuM4hTKZbXZLlQoo3lrckaDmCW9exKudfZFfJ',
+            access_token_secret:'LBwQrWvpGKw6d2CrUzUOZ0ygt44ZnggLDXKu6tRH36k'
+        });
+
+    }
+
+
 
     twit
         .verifyCredentials(function (err, data) {
@@ -63,7 +89,7 @@ function init() {
 
                 console.log(data.text + ' followers: ' + data.user.followers_count);
 
-                // This saves the tweets to a mongoDB
+                //This saves the tweets to a mongoDB
 
                 mongo.MongoClient.connect("mongodb://localhost:27017/tweetData", function (err, db) {
 
@@ -121,6 +147,9 @@ db.open(function (err) {
     });
 
 });
+
+
+//
 
 init();
 
