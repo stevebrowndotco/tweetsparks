@@ -7,6 +7,7 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , ntwitter = require('ntwitter')
+    , cons = require('consolidate')
 
 // Mongo Vars
 
@@ -24,13 +25,17 @@ var server = http.createServer(app);
 
 var io = require('socket.io').listen(server);
 
+// Mustache Vars
+
+var mustache = require('mustache');
+
 //
 
-app.configure(function(){
+app.configure(function() {
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
+    app.engine('html', cons.mustache)
+    app.set('view engine', 'html');
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
@@ -44,12 +49,14 @@ app.configure('development', function () {
     app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
+app.get('/', function(req, res) {
+    res.render('index');
+});
 
 // Let's go
 
-function init() {
 
+    function init() {
     console.log(process.env.PWD);
     console.log("Getting Tweet Data");
 
