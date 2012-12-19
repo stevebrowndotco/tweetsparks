@@ -50,10 +50,12 @@ app.get('/', routes.index);
 
 function init() {
 
-    console.log(app.settings.env);
+    console.log(process.env.PWD);
     console.log("Getting Tweet Data");
 
-    if ( app.settings.env == 'development') {
+    if ( process.env.PWD == '/github/node-twitter') {
+
+        console.log('ENVIRONMENT: this is development');
 
         var twit = new ntwitter({
             consumer_key:'cy9k3PN1bL9zqXR9rZJ6Fw',
@@ -63,6 +65,8 @@ function init() {
         });
 
     } else {
+
+        console.log('ENVIRONMENT: this is production');
 
         var twit = new ntwitter({
             consumer_key:'6FzFeYv6LDFHXemQxj54Q',
