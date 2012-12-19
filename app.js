@@ -108,7 +108,7 @@ db.open(function (err) {
 
                 cursor.nextObject(function (err, message) {
                     if (err) throw err;
-
+                    console.log('new tweet in database detecetd');
                     io.sockets.on('connection', function(socket) {
                         socket.emit('tweets', message);
                     })
