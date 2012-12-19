@@ -49,24 +49,37 @@ function init() {
             if (err)
                 console.log("Verification failed : " + err)
         })
+
+        // This connects to twitter api, and streams tweets based on a filter
         .stream('statuses/filter', {'track' : 'barackobama'}, function(stream) {
 
             stream.on('data', function (data) {
 
                 console.log(data.text + ' followers: '+ data.user.followers_count);
 
-                db.open(function(err, client){
-                    client.createCollection("tweets", function(err, col) {
-                        col.insert({'text' : data.text, 'followers' : data.user.followers_count });
-                        db.close();
-                    });
-                });
+                // This saves the tweets to a database
+
+                mongo.MongoClient.connect("mongodb://localhost:27017/tweetData", function (err, db) {
+
+                    var collection = db.collection('tweets');
+
+                    collection.insert({'text' : data.text , 'followers' : data.user.followers_count}, function() {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+
+                    console.log('saved tweets to database');
+
+                })
 
             });
 
         });
 
 }
+
+//This detects when there are new tweets added to the database, and pushes it to the client using socket.io
 
 db.open(function(err) {
 
@@ -88,6 +101,8 @@ db.open(function(err) {
             (function next() {
                 cursor.nextObject(function(err, message) {
                     if (err) throw err;
+
+                    //TODO: Socket.io
                     console.log('new entry detected');
                     next();
                 });
