@@ -1,22 +1,26 @@
-/**
- * Module dependencies.
- Added
- 1. ntwitter - package for using Twitter API
- 2. url - used to parse out different parts of URLs
- */
+/* Author: Steve */
+
+// Express vars
 
 var express = require('express')
     , http = require('http')
     , path = require('path')
     , ntwitter = require('ntwitter')
 
-//
+// Mongo Vars
 
-    var mongo = require('mongodb')
+var mongo = require('mongodb')
     , mongoServer = new mongo.Server('localhost', 27017)
     , db = new mongo.Db('tweetData', mongoServer)
 
-//
+// Socket.io Vars
+
+var socketApp = require('express').createServer()
+    , io = require('socket.io').listen(app);
+
+socketApp.listen(server);
+
+// App Vars
 
 var app = express();
 
@@ -31,6 +35,8 @@ app.configure(function () {
 app.configure('development', function () {
     app.use(express.errorHandler());
 });
+
+// Let's go
 
 function init() {
 
@@ -51,19 +57,19 @@ function init() {
         })
 
         // This connects to twitter api, and streams tweets based on a filter
-        .stream('statuses/filter', {'track' : 'barackobama'}, function(stream) {
+        .stream('statuses/filter', {'track':'barackobama'}, function (stream) {
 
             stream.on('data', function (data) {
 
-                console.log(data.text + ' followers: '+ data.user.followers_count);
+                console.log(data.text + ' followers: ' + data.user.followers_count);
 
-                // This saves the tweets to a database
+                // This saves the tweets to a mongoDB
 
                 mongo.MongoClient.connect("mongodb://localhost:27017/tweetData", function (err, db) {
 
                     var collection = db.collection('tweets');
 
-                    collection.insert({'text' : data.text , 'followers' : data.user.followers_count}, function() {
+                    collection.insert({'text':data.text, 'followers':data.user.followers_count}, function () {
                         if (err) {
                             console.log(err);
                         }
@@ -81,30 +87,34 @@ function init() {
 
 //This detects when there are new tweets added to the database, and pushes it to the client using socket.io
 
-db.open(function(err) {
+db.open(function (err) {
 
     if (err) throw err;
 
-    db.collection('tweets', function(err, collection) {
+    db.collection('tweets', function (err, collection) {
         if (err) throw err;
 
-        var latest = collection.find({}).sort({ $natural: -1 }).limit(1);
+        var latest = collection.find({}).sort({ $natural:-1 }).limit(1);
 
-        latest.nextObject(function(err, doc) {
+        latest.nextObject(function (err, doc) {
             if (err) throw err;
 
-            var query = { _id: { $gt: doc._id }};
+            var query = { _id:{ $gt:doc._id }};
 
-            var options = { tailable: true, awaitdata: true, numberOfRetries: -1 };
-            var cursor = collection.find(query, options).sort({ $natural: 1 });
+            var options = { tailable:true, awaitdata:true, numberOfRetries:-1 };
+            var cursor = collection.find(query, options).sort({ $natural:1 });
 
             (function next() {
-                cursor.nextObject(function(err, message) {
+
+                cursor.nextObject(function (err, message) {
                     if (err) throw err;
 
-                    //TODO: Socket.io
-                    console.log('new entry detected');
+                    io.sockets.on('connection', function(socket) {
+                        socket.emit('tweets', message);
+                    })
+
                     next();
+
                 });
             })();
         });
@@ -114,8 +124,7 @@ db.open(function(err) {
 
 init();
 
-
+//Listening on port 3000
 server.listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));
 });
-
