@@ -2,33 +2,16 @@ $(function () {
 
     //
 
-    var tweetsCaptured = 0;
-    var averageFollowers = 0;
-    var maximumReach = 0;
-    var averageFollowers = 0;
-
     var twitterApi = new TwitterApi();
 
     //
 
-    var getFollowers;
     var getUserInfo;
-    var getSuggestions;
+
 
     //
 
     var user = 'stevebrowndotco';
-
-    //
-
-    var tweetSparkSuggestions = {
-        1:'barackObama',
-        2:'AdamSandler',
-        3:'ladygaga',
-        4:'peterfacinelli',
-        5:'adrianalima',
-        6:'bjork'
-    }
 
     //
 
@@ -59,7 +42,6 @@ $(function () {
     }
 
     var mouse = { x:0, y:0 }, INTERSECTED;
-    var maxParticles = 999;
     var popupText;
 
     var radius = 600;
@@ -94,19 +76,10 @@ $(function () {
 
         })
 
-//        getFollowers = twitterApi.response('statuses/friends.json?screen_name=' + user, function (data) {
-//
-//            $.each(data, function (count, item) {
-//
-//            });
-//
-//        });
-
 
         var socket = io.connect('http://localhost:3000');
         socket.on('tweets', function (data) {
-            renderTweet(data);
-//              console.log(data);
+            renderTweet(data)
         });
 
     }
