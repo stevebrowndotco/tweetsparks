@@ -1,0 +1,106 @@
+/* =Utility Helpers
+==================================*/
+
+.scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.hide {
+  display: none;
+}
+.hide-important {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.show {
+  display: inherit !important;
+}
+
+.hoverable {
+  cursor: pointer;
+}
+.hoverable:hover {
+  background: #fffee7;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.no-scroll {
+  overflow:hidden;
+}
+
+.crop {
+  overflow: hidden;
+}
+
+.center-text {
+  text-align: center !important;
+}
+
+.default-layout {
+  margin: 0;
+  padding: 0;
+}
+
+.bolder {
+  font-weight: bolder;
+}
+
+.splitForPrint {
+  page-break-after: avoid;
+  page-break-before: avoid;
+  page-break-inside: avoid;
+}
+
+.print-only {
+  display: none;
+}
+
+.force-screen-size {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+
+
+@media print {
+  .print-only {
+    display: block;
+  }
+}
+
+/* =Hide with Widths
+==================================*/
+
+.ipad-portrait-width-show {
+  display: none;
+}
+
+.mobile-width-show {
+  display: none;
+}
+
+
+@media screen and (max-width: @ipad-portrait-width) {
+
+  .ipad-portrait-width-hidden {
+    display: none !important;
+  }
+
+  .ipad-portrait-width-show {
+    display: block !important;
+  }
+}
+
+
+

@@ -1,0 +1,66 @@
+/* Responsive 12 Grid
+Taken from Twitter bootstrap but made to work with fixed AND fluid. ~Steve
+*/
+
+.grid-12 {
+
+  [class*="span"]:first-child {
+    margin-left: 0;
+  }
+
+  .grid-row {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .span1 {
+    width: 5.982905983%;
+    margin-left: 2.564102564%;
+    float: left;
+  }
+
+  .span3 {
+    width: 17.9487179%;
+    margin-left: 2.564102564%;
+    float: left;
+  }
+
+  .span4 {
+    width: 31.623931624%;
+    margin-left: 2.564102564%;
+    float: left;
+  }
+
+  .span6 {
+    width: 48.717948718%;
+    margin-left: 2.564102564%;
+    float: left;
+  }
+
+  .span12 {
+    width: 100%;
+  }
+
+  .main-section {
+    box-shadow: 0 0 2px #bbb inset, 0 1px 0px white inset;
+    border: none;
+  }
+
+}
+
+@media screen and (max-width: 1023px ) {
+
+    .grid-12 {
+
+      .grid-row {
+        margin: 0;
+      }
+      .span6 {
+        width: 100%;
+        margin: 0 0 20px 0;
+      }
+
+    }
+
+}

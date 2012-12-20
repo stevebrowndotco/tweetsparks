@@ -1,0 +1,313 @@
+/* =Button Framework
+======================================================================================================================*/
+
+/* =Standard Button Look and Behaviour
+==================================*/
+
+.button {
+
+  .gradient(#ffffff, #e6e6e6);
+  .border-radius(3px);
+  border: 1px solid #CCC;
+  border-bottom: 1px solid #BBB;
+  color: #333;
+  font-size: 13px;
+  line-height: 20px;
+  padding: 4px 10px 3px;
+  text-align: center;
+  text-shadow: 0 1px 0 #EEE;
+  cursor: pointer;
+  display: block;
+  max-width: 200px;
+  .transition(all 0.1s linear);
+  font-weight: normal;
+
+  a {
+    color: #fff;
+  }
+
+  &:hover {
+    .gradient(#ffffff, #d9d9d9);
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    .box-shadow( 0 0 6px rgba(100, 100, 100, 0.3) );
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:active, &.checked {
+    .box-shadow(inset 0 0 30px 0 #999999, 0 1px 0 0 white, 0 0 0);
+  }
+
+  &:visited {
+    color: black;
+  }
+
+  .icon {
+    display: inline-block;
+    vertical-align: text-top;
+  }
+
+  .title {
+    display: inline;
+    line-height: 19px;
+  }
+
+  .caret {
+    margin-top: 7px;
+  }
+
+}
+
+/* =Rows of Buttons
+==================================*/
+
+.button-group {
+
+  .button {
+    float: left;
+    .border-radius(0);
+  }
+
+  .button:first-child {
+    border-radius: 10px 0 0 10px ! Important;
+    border-right: none;
+  }
+
+  .button:last-child {
+    border-radius: 0 10px 10px 0 ! Important;
+    border-left: none;
+  }
+
+}
+
+/* =Button Themes
+==================================*/
+
+/* Large Button */
+.button-large {
+  padding: 8px;
+  .icon {
+    vertical-align: bottom;
+  }
+}
+
+/* Small Button */
+.button-small {
+  padding: 0px 6px !important;
+  height: 20px !important;
+  line-height: 1.8 !important;
+}
+
+/* Disabled Button */
+button[disabled], button[disabled]:hover, .disabled {
+  .gradient(#eee, #ccc);
+  .opacity(40);
+  box-shadow: none;
+  text-shadow: none;
+  border: 1px solid #CCC;
+  cursor: default !important;
+}
+
+button[disabled], button[disabled] .span {
+  cursor: default !important;
+  color: #CCC;
+}
+
+/* Rounded Button */
+.button-rounded {
+  border-radius: 50px;
+}
+
+/* Green Button */
+.button-green, .button-green:visited {
+
+  & {
+    .gradient(#7FBF4D, #63A62F);
+    border: 1px solid #63A62F;
+    border-bottom: 1px solid #5B992B;
+    color: white !important;
+    text-shadow: 0 -1px 0 #4C9021;
+  }
+
+  &:hover {
+    .gradient(#76B347, #5E9E2E);
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 0 6px #76B347;
+  }
+
+  &:active {
+    border: 1px solid #5B992B;
+    border-bottom: 1px solid #538C27;
+  }
+
+}
+
+/* Red Button */
+.button-red {
+
+  & {
+    .gradient(#ff4660, #e84a5a);
+    .border-radius(3px);
+    border: 1px solid #cc3c50;
+    border-bottom: 1px solid #932b3a;
+    text-shadow: 0 -1px 0 #ff4660;
+    color: #fff;
+  }
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:hover {
+    .gradient(#f24159, #db4655);
+    box-shadow: 0 0 6px #ff4660;
+    color: white;
+  }
+
+  &:active {
+    .gradient(#cf394e, #cf4250);
+    color: white;
+  }
+
+}
+
+/* Blue Button */
+.button-blue {
+
+  & {
+    .gradient(#5BC0DE, #2F96B4);
+    .border-radius(3px);
+    border: 1px solid #2F96B4;
+    border-bottom: 1px solid #2F96B4;
+    text-shadow: none;
+    color: #fff;
+  }
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:hover {
+    .gradient(#2F96B4, #2F96B4);
+    box-shadow: 0 0 2px black;
+    color: white !important;
+  }
+
+  &:active {
+     .gradient(#2F96B4, #2F96B4);
+    color: white;
+  }
+
+}
+
+/* Pink Button */
+.button-pink {
+
+  & {
+    .gradient(#b83654, #600e27);
+    .border-radius(3px);
+    border: 1px solid #bc3a56;
+    border-bottom: 1px solid #84243c;
+    text-shadow: none;
+    color: #fff;
+  }
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:hover {
+    .gradient(#fa688e, #fa9fb7);
+    box-shadow: 0 0 2px black;
+    color: white !important;
+  }
+
+
+
+}
+
+/* Simple Button */
+.button-simple {
+  border: 1px solid #ddd;
+  width: auto;
+  background: white;
+  max-width: none;
+  color: #000;
+
+  a {
+    color: #000;
+  }
+
+  &:hover {
+    color: #000;
+    background: white;
+    box-shadow: none;
+  }
+
+}
+
+.button-simple:hover {
+  border: 1px solid #999;
+}
+
+.button-simple:active {
+  border: 1px solid @green;
+}
+
+/* Button Tight */
+.button-tight {
+  float: left;
+  margin-right: 10px;
+}
+
+.button-tight-right {
+  float: right;
+}
+
+/* Button Square */
+.button-square {
+  .border-radius(0);
+}
+
+/* Social Buttons */
+.button-social {
+  background-image: none;
+  background: #fff;
+  width: 170px !important;
+  height: 37px;
+}
+
+.button-social:hover {
+  border: 1px @green solid;
+  background: none transparent;
+  background-image: none ! Important;
+  box-shadow: none;
+}
+
+/* Next to input boxes */
+.button-input {
+
+  & {
+    width: 30px;
+    float: right;
+    overflow: hidden;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    .border-radius(0);
+  }
+
+  .icon {
+    margin-top: 6px;
+  }
+
+}
+
+
+
+

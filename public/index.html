@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="gl" lang="gl">
+<head>
+		<title>TweetSpark</title>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+		<!-- Required -->
+
+		<script type="text/javascript" src="js/Three.js"></script>
+		<script type="text/javascript" src="js/shaders/BokehShader.js"></script>
+
+		<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+
+		<script type="text/javascript" src="js/Tween.js"></script>
+
+		<!---->
+
+		<script src="http://107.22.137.104:3000//socket.io/socket.io.js"></script>
+
+		<!---->
+
+		<link rel="stylesheet" href="css/framework/framework.css" media="screen" type="text/css" />
+		<link rel="stylesheet" href="css/tweetspark/main.css" media="screen" type="text/css" />
+
+		<script src="logic.js" type="text/javascript"></script>
+		<script src="ui.js" type="text/javascript"></script>
+
+</head>
+<body>
+	<div id="twitterPopup"></div>
+	<div id="foldDown" class="active">
+	<div id="foldDownInner">
+
+		<div class="drawer"></div>
+
+		<h1>TweetSpark*</h1>
+
+		<p class="leading">Twitter Visualisation Tool</p>
+
+		<div class="hashtagInput"><input id="userInput" type="text" placeholder="Enter twitter username here"/></div>
+
+		<button class="button" id="startButton">Start</button>
+
+		<div id="userInfo" class="clearfix">
+
+			<h2></h2>
+
+			<div id="userAvatar"></div>
+			<ul>
+				<li id="fullName"><span class="label ellipsis"></span><span class="value ellipsis"></span></li>
+				<li id="description"><span class="label ellipsis"></span><span class="value ellipsis"></span></li>
+				<li id="location"><span class="label ellipsis">Location: </span><span class="value ellipsis"></span></li>
+				<li id="followers"><span class="label elipsis">Followers: </span><span class="value ellipsis"></span></li>
+			</ul>
+
+		</div>
+
+		<h2>TweetSpark Suggestions</h2>
+		
+		<ul id="suggestions">
+			<li><a href="barackobama">Barack Obama</a></li>
+			<li><a href="peterfacinelli">Peter Facinelli</a></li>
+			<li><a href="bjork">Bjork</a></li>
+			<li><a href="adrianalima">Adriana Lima</a></li>
+			<li><a href="ladygaga">Lady Gaga</a></li>
+			<li><a href="adriangrenier">Adrian Grenier</a></li>
+		</ul>
+		
+	</div>
+
+	</div>
+
+	<div id="selectedTweet">
+		<div class="userDetails">
+			<div class="user-avatar"></div>
+			<h2></h2>
+		 	<p></p>
+		</div>
+		<div class="tweetContents">
+			<p id="when"></p>
+			<p id="tweetCopy"></p>
+		</div>
+	</div>
+	<div id="container">
+	</div>
+
+	<script>
+		var socket = io.connect('http://107.22.137.104:3000');
+		socket.on('tweets', function (data) {
+			console.log(data);
+		});
+	</script>
+
+</body>
+</html>

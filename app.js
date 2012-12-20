@@ -23,7 +23,7 @@ var server = http.createServer(app);
 
 // Socket.io Vars
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {log: true });
 
 // Mustache Vars
 
@@ -84,8 +84,6 @@ app.get('/', function(req, res) {
 
     }
 
-
-
     twit
         .verifyCredentials(function (err, data) {
             console.log("Verifying Credentials...");
@@ -98,21 +96,29 @@ app.get('/', function(req, res) {
 
             stream.on('data', function (data) {
 
+
+
                 console.log(data.text + ' followers: ' + data.user.followers_count);
 
                 //This saves the tweets to a mongoDB
 
                 mongo.MongoClient.connect("mongodb://localhost:27017/tweetData", function (err, db) {
 
+                    if(err) {
+                        console.log(err);
+                    }
+
                     var collection = db.collection('tweets');
 
-                    collection.insert({'text':data.text, 'followers':data.user.followers_count}, function () {
+                    collection.insert({'text':data.text, 'user':data.user.screen_name,'followers':data.user.followers_count}, function (err, col) {
                         if (err) {
                             console.log(err);
                         }
                     })
 
                     console.log('saved tweets to database');
+
+                    db.close();
 
                 })
 
@@ -124,40 +130,52 @@ app.get('/', function(req, res) {
 
 //This detects when there are new tweets added to the database, and pushes it to the client using socket.io
 
-db.open(function (err) {
+io.sockets.on('connection', function(socket) {
 
-    if (err) throw err;
+    console.log('CLient '+ socket.id + 'has connected!');
 
-    db.collection('tweets', function (err, collection) {
+    db.open(function (err) {
+
         if (err) throw err;
 
-        var latest = collection.find({}).sort({ $natural:-1 }).limit(1);
-
-        latest.nextObject(function (err, doc) {
+        db.collection('tweets', function (err, collection) {
             if (err) throw err;
 
-            var query = { _id:{ $gt:doc._id }};
+            var latest = collection.find({}).sort({ $natural:-1 }).limit(1);
 
-            var options = { tailable:true, awaitdata:true, numberOfRetries:-1 };
-            var cursor = collection.find(query, options).sort({ $natural:1 });
+            latest.nextObject(function (err, doc) {
+                if (err) throw err;
 
-            (function next() {
+                var query = { _id:{ $gt:doc._id }};
 
-                cursor.nextObject(function (err, message) {
-                    if (err) throw err;
-                    console.log('new tweet in database detecetd');
-                    io.sockets.on('connection', function(socket) {
-                        socket.emit('tweets', message);
-                    })
+                var options = { tailable:true, awaitdata:true, numberOfRetries:-1 };
+                var cursor = collection.find(query, options).sort({ $natural:1 });
 
-                    next();
+                (function next() {
 
-                });
-            })();
+                    cursor.nextObject(function (err, message) {
+                        if (err) throw err;
+
+
+                            socket.emit('tweets', message);
+                            console.log('pushing tweet to client');
+
+
+                        next();
+
+                    });
+                })();
+            });
         });
+
     });
 
-});
+    socket.on('disconnect', function(socket) {
+        console.log('disonnect');
+        db.close();
+    })
+
+})
 
 
 //

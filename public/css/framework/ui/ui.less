@@ -1,0 +1,539 @@
+/* =Loader
+==================================*/
+.loader {
+	background:url(@loader-path) no-repeat;
+	width: 30px;
+	height: 30px;
+	margin: 50px auto;
+}
+
+/* Required Modernizr */
+.csstransitions .loader {
+	 background: url(@loader-css3-path) no-repeat 50% 40%;
+     .animation(rotate 1.5s infinite linear);
+     width: 50px;
+     height: 50px;
+     left: 50%;
+     top: 50%;
+     margin: -25px 0 0 -25px;
+     padding: 0;
+     position: absolute;
+}
+
+
+.csstransitions .boxy-loader .loader {
+	background:url(@loader-path) no-repeat;
+	width: 30px;
+	height: 30px;
+	margin: 50px auto;
+	.animation(normal);
+    top: 0;
+    left: 0; 
+}
+
+
+/* =Sections
+==================================*/
+section.main-section {
+	border: 1px solid #E1E1E1;
+	border-radius: 5px;
+	box-shadow: 0 1px 0px white inset;
+	background: white;
+	background: rgba(255, 255, 255, 0.7);
+	padding: 0.5em 0;
+	position: relative; 
+	
+	.main-section-inner {
+		padding: 0 1.5em;
+	}
+}
+
+
+/* =Dropdown Panels
+==================================*/
+.dropdown-panel {
+	.gradient(#ffffff, #f8f8f8);
+	.border-radius(0 0 3px 3px);
+	border: 1px solid #CCC;
+	box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+	position: relative;
+	padding: 1em;
+	position: absolute;
+	top: 29px;
+	border-top: none;
+	z-index: 1;
+	h3 {
+		background: none;
+		font-size: 16px;
+		border-bottom: 1px solid #eeeeee;
+		font-weight: bold;
+		margin: 0;
+	}
+	
+	.action-buttons {
+		position: absolute;
+		top: 13px;
+		right: 11px;
+	}
+}
+
+
+/* =Table UI
+==================================*/
+.ie8 .table-ui  {
+
+	border-left: 1px solid #CCC !important;
+	border-top: 1px solid #ccc !important;
+	tr {
+		border-bottom: none;
+		td {
+				border-bottom: 1px solid #CCC !important;
+		}		
+	}
+}
+
+.table-ui {
+	width: 100%;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+	margin-bottom: 10px;
+	text-align: left;
+	border-collapse: collapse;
+	border-spacing: 0;
+	
+	tr {
+		border-bottom: 1px solid #CCC;
+		.grip-icon {
+			position: absolute;
+			opacity: 0;
+			cursor: move;
+			
+			left: 3px;
+			padding: 7px 0;
+		}
+	}
+	
+	td.td-tight {
+		padding: 0 !important;
+	}
+	
+}
+
+.ie8 {
+	.table-ui tr td {
+		border-bottom: none;
+	}
+}
+
+.table-with-columns td,
+.table-with-columns th {
+	border-right: 1px solid #CCC;	
+}
+
+
+.table-with-padding td,
+.table-with-padding th {
+	padding: 10px !important;
+}
+
+.table-fixed {
+	table-layout: fixed;
+}
+
+.table-ui thead {
+
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	background: #eee;
+	color: #000;
+	height: 30px;
+	line-height: 2.2;
+	
+	tr {
+		background: inherit;
+	}
+
+}
+
+.table-ui th {
+	&:hover .down-arrow-icon,
+	&:hover .up-arrow-icon {
+		opacity: (1);
+	}
+}
+
+.table-with-stripes tr:nth-child(even),
+.table-with-stripes tr.tr-even {
+	background:#f7f7f7;
+}
+
+.table-ui td {
+	padding: 0;
+	margin: 0; 
+	vertical-align: middle;
+}
+
+
+/* =DL UI
+==================================*/
+
+.dl-ui dt {
+	float: left;
+	margin-bottom: 10px;
+}
+
+.dl-ui dd {
+	margin-bottom: 10px;
+}
+
+
+/* =Fake Table UI
+==================================*/
+
+/* Framework */
+
+.fake-table-ui {
+	width: 100%;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+	margin-bottom: 10px;
+}
+
+.fake-table-ui .header {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	background: rgba(58, 67, 75, 0.1);
+	color: #000;
+	height: 30px;	
+	line-height: 2.2;
+
+}
+
+.fake-table-ui .header li,
+.fake-table-ui .post-row {
+	float: left;
+	height: 100%;
+}
+
+.fake-table-ui .col {
+	padding: 0 1%;
+	width: auto;
+}
+
+/* =Legend
+==================================*/
+
+.legend-container {
+	font-size: 12px;
+	position: absolute;
+	top: 26px;
+	right: 11px;
+	text-align: right;
+
+	.legend-key {
+		float: left;
+		margin-right: 15px;
+
+		.key {
+			width: 9px;
+			height: 9px;
+			background: red;
+			display: inline-block;
+			margin-right: 2px;
+
+		}
+
+		.key-1 {
+			background: #4fd7ff;
+		}
+
+		.key-2 {
+			background: #ccf3ff;
+		}
+	}
+}
+
+/* =Form UI
+==================================*/
+
+input[type=text], input[type=password] {
+	border: 1px solid #b5b5b5;
+	.box-shadow( inset 2px 2px 6px rgba(0,0,0,0.13) );
+}
+
+textarea {
+	border: 1px solid #b5b5b5;
+	.box-shadow( inset 2px 2px 6px rgba(0,0,0,0.13) );
+}
+
+input[type=text]:focus,
+input[type=password]:focus{
+	outline: none;
+	.box-shadow(inset 2px 2px 6px rgba(0,0,0,0.13), 0px 0px 5px rgba(116,80,137,0.2), 0 0 0);
+}
+
+input.search{
+	display: block;
+	padding: 4px 4px 4px 28px;
+	border: 1px solid #aaa;
+	outline: none;
+	background: #fff url(/design/images/icon/magnifying-glass.png) no-repeat 8px 5px;
+	.box-shadow( inset 4px 4px 7px rgba(0,0,0,0.22) );
+	width: 129px;
+	margin: auto;
+}
+
+select {
+  display: inline-block;
+  height: 18px;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+  border: 1px solid #cccccc;
+  .border-radius(3px);
+}
+select {
+  height: 28px;
+  /* In IE7, the height of the select element cannot be changed by height, only font-size */
+
+  *margin-top: 4px;
+  /* For IE7, add top margin to align select with labels */
+
+  line-height: 28px;
+}
+
+select[disabled] {
+    color: #CCC;
+    border: 1px solid #DDD;
+}
+
+select.client-select {
+    width: 200px;
+}
+
+.page-form {
+	max-width: 700px;
+	
+	h3 {
+		padding: 0;
+		margin: 0 0 10px 0;
+		background: none;
+	}
+
+
+    label {
+        width: 100%;
+        display: block;
+        color: black;
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+    
+    label span.note {
+        color: #666;
+        font-weight: normal;
+        font-style: italic;
+    }
+    input[type="text"], textarea, input[type="password"] {
+	    padding: 0.5em 0.5em;
+	    width: 80% !important;
+	    margin-bottom: 15px;
+    }
+    
+    input[type="text"]:focus, textarea:focus { 
+	    outline: 1px solid @green;
+	
+    }
+
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    textarea {
+    		    padding: 0.5em 0.5em;
+	    width: 80% !important;
+    }
+    ul, ol {
+	    margin: 0;
+	    padding: 0;
+	    list-style-type: none;
+    }
+    dd {
+	    margin: 0 0 10px 0;
+    }
+    fieldset {
+        background: #fff;
+        padding: 2em 2em 2.5em 2em;
+        border-bottom: 2px solid @primary-contrast;
+        margin-bottom: 1em !important;
+        position: relative;
+        
+        &.with-numbers {
+	         padding: 2em 2em 2.5em 6em;
+        }
+    }
+    
+   
+    .step {
+        text-align: center;
+        color: #eee;
+        font-size: 3em;
+        position: absolute;
+        display: block;
+        width: 40px;
+        height: 40px;
+
+        left: 22px;
+        top: 11px;
+    }
+    .client-select {
+        width:500px;
+    }
+    
+    .button-input {
+    	margin-right: 65px;
+    }
+    
+    fieldset .error {
+    	width: 80%;
+    }
+
+    .loader {
+		height: 10px;
+		margin: 10px 40%;
+    }
+
+  .message {
+    width: 80%;
+  }
+    
+}
+
+
+/* =Data Box
+==================================*/
+
+.data-box {
+
+	height: 115px;
+
+	float: left;
+	text-align: center;
+
+
+	overflow: hidden;
+	position: relative;
+	.transition(all 0.3s ease-in-out);
+	line-height: 1.4;
+	
+	.positive-circle-icon,
+	.negative-circle-icon,
+	.neutral-up-circle-icon,
+	.neutral-down-circle-icon {
+		display: inline-block;
+		position: static !important;
+		vertical-align: middle;
+	}
+	
+
+}
+
+.data-box-inner {
+	border: 1px solid #f5f5f5;
+	height: 94%;
+	overflow: hidden;
+	border-radius: 5px;
+	background: #fcfcfc;
+}
+
+
+
+.data-box .icon {
+	position: absolute;
+	width: 17px;
+	height: 17px;
+	top: 8px;
+	left: 10px;
+	cursor: pointer;
+}
+
+.data-box .percentChange {
+	top: 9px;
+	right: 14px;
+	position: absolute;
+	font-size: 14px;
+	font-style: italic;
+	text-align: right;
+	width: auto !important;
+	height: 16px !important;
+	font-weight: bold;
+
+}
+
+.data-box .positive {
+
+	color: #5D9800;
+	
+	img {
+		vertical-align: 4px;	
+	}
+ 
+}
+
+.data-box .negative {
+	color: #A32431;
+	
+	img {
+		vertical-align: 4px;	
+	}
+
+}
+
+.editable-text {
+	background: none;
+	border: 1px solid transparent;
+}
+.editable-text:hover {
+	background: rgba(255,255,243,0.7);
+	border: 1px dotted #CBA35E !important;	
+}
+.editable-text.editing:hover {
+	border: none !important;
+	
+}
+
+/* =Screen Mask 
+==================================*/
+
+#screen-mask { /* Used to darken the screen. Only required once per usage. */
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.85);
+position: fixed;
+z-index: 98;
+opacity: 0;
+top: 0 !important;
+}
+
+
+/* =Tooltip
+==================================*/
+
+.tooltip {
+	border-radius: 5px;
+	background: black;
+	max-width: 150px;
+	color: #fff;
+	text-align: center;
+	padding: 5px;
+	
+}
+
+
+
+
