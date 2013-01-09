@@ -6,7 +6,7 @@ var express = require('express')
     , routes = require('./routes')
     , http = require('http')
     , path = require('path')
-    , ntwitter = require('ntwitter')
+    , ntwitter = require('ufff')
     , cons = require('consolidate')
 
 // Mongo Vars
@@ -98,7 +98,7 @@ app.get('/', function(req, res) {
 
 
 
-                console.log(data.text + ' followers: ' + data.user.followers_count);
+               // console.log(data.text + ' followers: ' + data.user.followers_count);
 
                 //This saves the tweets to a mongoDB
 
