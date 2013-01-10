@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9458a3d7-77c7-4fc7-889b-4da976270b7c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/js/underscore/underscore.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/logic.js" afterPath="$PROJECT_DIR$/public/logic.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitApp.js" afterPath="$PROJECT_DIR$/twitApp.js" />
     </list>
     <ignored path="node-twitter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,47 +29,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="logic.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/logic.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="330" column="0" selection-start="8737" selection-end="8840" vertical-scroll-proportion="-11.576923">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.less" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/css/tweetspark/main.less">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="19" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/test.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="306" column="36" selection-start="7642" selection-end="7642" vertical-scroll-proportion="-0.5276074">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="twitApp.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="twitApp.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/twitApp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="0" selection-start="467" selection-end="467" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ray.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/js/ray.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="44" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="136" column="34" selection-start="3433" selection-end="3433" vertical-scroll-proportion="0.7679558">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -74,16 +43,25 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="25" selection-start="2275" selection-end="2275" vertical-scroll-proportion="0.0">
+            <state line="43" column="33" selection-start="1502" selection-end="1511" vertical-scroll-proportion="-19.375">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.html">
+      <file leaf-file-name="logic.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/logic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="33" selection-start="3726" selection-end="3726" vertical-scroll-proportion="0.0">
+            <state line="157" column="27" selection-start="3539" selection-end="3539" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="socket.io.client.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Desktop/new/Enzo/twitTest/public/js/app/socket.io.client.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="74" column="72" selection-start="2227" selection-end="2273" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,30 +80,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
+        <option value="$PROJECT_DIR$/twitTest/twtest.html" />
+        <option value="$PROJECT_DIR$/twitTest/index.html" />
+        <option value="$PROJECT_DIR$/twitTest/public/style/layout1.css" />
         <option value="$PROJECT_DIR$/twitTest/package.json" />
         <option value="$PROJECT_DIR$/twitTest/public/js/app/socket.io.client.js" />
         <option value="$PROJECT_DIR$/twitTest/twitApp.js" />
         <option value="$USER_HOME$/Desktop/new/Steve/public/logic.js" />
         <option value="$USER_HOME$/Desktop/new/Merge/package.json" />
         <option value="$USER_HOME$/Desktop/new/Enzo/twitTest/package.json" />
-        <option value="$USER_HOME$/Desktop/new/Merge/index.html" />
         <option value="$USER_HOME$/Desktop/new/Merge/public/logic.js" />
         <option value="$USER_HOME$/Desktop/new/Merge/twitApp.js" />
-        <option value="$PROJECT_DIR$/twitApp.js" />
-        <option value="$PROJECT_DIR$/public/css/tweetspark/main.less" />
+        <option value="$PROJECT_DIR$/public/js/underscore/underscore.js" />
+        <option value="$USER_HOME$/Desktop/new/Merge/index.html" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/test.html" />
-        <option value="$PROJECT_DIR$/public/js/ray.js" />
-        <option value="$PROJECT_DIR$/public/test.js" />
         <option value="$PROJECT_DIR$/public/logic.js" />
+        <option value="$PROJECT_DIR$/twitApp.js" />
       </list>
     </option>
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
+    <option name="x" value="66" />
     <option name="y" value="22" />
-    <option name="width" value="2560" />
-    <option name="height" value="1414" />
+    <option name="width" value="942" />
+    <option name="height" value="1053" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -177,7 +155,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node-twitter" />
+              <option name="myItemId" value="twitternode" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -187,7 +165,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node-twitter" />
+              <option name="myItemId" value="twitternode" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -201,7 +179,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node-twitter" />
+              <option name="myItemId" value="twitternode" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -219,9 +197,34 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../brainstorm/diablo/public/js/app" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/new/Enzo/twitTest/public/js/app" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html" />
+  </component>
+  <component name="PublishConfig">
+    <servers>
+      <server id="4d3eab99-1393-4d13-a263-7a3e824da6fe">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </server>
+      <server id="5c213f9a-26bf-4f3b-b3ee-2e24b7b4b2fe">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </server>
+      <server id="9e596fe6-c691-445d-9a88-24f4cd4f30d5">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </server>
+    </servers>
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -241,24 +244,6 @@
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false">
-    <option name="USER" value="" />
-    <option name="PASSWORD" value="" />
-    <option name="mySSHConnectionTimeout" value="30000" />
-    <option name="mySSHReadTimeout" value="30000" />
-    <option name="LAST_MERGED_REVISION" />
-    <option name="MERGE_DRY_RUN" value="false" />
-    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
-    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
-    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
-    <option name="DETECT_NESTED_COPIES" value="true" />
-    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
-    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
-    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
-    <option name="FORCE_UPDATE" value="false" />
-    <option name="IGNORE_EXTERNALS" value="false" />
-    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="9458a3d7-77c7-4fc7-889b-4da976270b7c" name="Default" comment="" />
@@ -288,27 +273,27 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="2560" height="1414" extended-state="0" />
+    <frame x="66" y="22" width="942" height="1053" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32869297" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32869297" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14200477" sideWeight="0.671307" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22470434" sideWeight="0.9984639" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -333,6 +318,7 @@
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
     <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
+    <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
     <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
@@ -342,6 +328,7 @@
     <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
     <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+    <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
@@ -364,115 +351,83 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/logic.js">
+    <entry file="file://$USER_HOME$/Desktop/new/Enzo/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="262" column="0" selection-start="6674" selection-end="6674" vertical-scroll-proportion="0.0">
+        <state line="2" column="46" selection-start="53" selection-end="53" vertical-scroll-proportion="0.03314917" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/new/Steve/public/logic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="46" selection-start="2801" selection-end="2801" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/new/Merge/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="1" selection-start="223" selection-end="223" vertical-scroll-proportion="0.14917128" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/new/Enzo/twitTest/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="24" selection-start="215" selection-end="215" vertical-scroll-proportion="0.1160221" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/new/Merge/public/logic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="130" column="12" selection-start="2838" selection-end="2838" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/tweetspark/main.less">
+    <entry file="file://$USER_HOME$/Desktop/new/Merge/twitApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="19" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0">
+        <state line="54" column="42" selection-start="1212" selection-end="1212" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test.js">
+    <entry file="file://$USER_HOME$/Desktop/new/Enzo/twitTest/public/js/app/socket.io.client.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="162" column="24" selection-start="3924" selection-end="3932" vertical-scroll-proportion="0.0">
+        <state line="74" column="72" selection-start="2227" selection-end="2273" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitApp.js">
+    <entry file="file://$PROJECT_DIR$/public/js/underscore/underscore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="467" selection-end="467" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="8" column="13432" selection-start="13599" selection-end="13599" vertical-scroll-proportion="0.033632286">
+          <folding>
+            <element signature="e#0#165#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/ray.js">
+    <entry file="file://$USER_HOME$/Desktop/new/Merge/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="44" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="25" selection-start="2275" selection-end="2275" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="43" selection-start="2388" selection-end="2388" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/logic.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/Three.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="471" selection-start="26293" selection-end="26296" vertical-scroll-proportion="0.33333334">
+        <state line="15" column="4" selection-start="750" selection-end="750" vertical-scroll-proportion="0.2553916">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="25" selection-start="2275" selection-end="2275" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/ray.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="44" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="173" column="33" selection-start="3726" selection-end="3726" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/tweetspark/main.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="19" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitApp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="467" selection-end="467" vertical-scroll-proportion="0.0">
+        <state line="43" column="33" selection-start="1502" selection-end="1511" vertical-scroll-proportion="-19.375">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/logic.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="330" column="0" selection-start="8737" selection-end="8840" vertical-scroll-proportion="-11.576923">
+        <state line="157" column="27" selection-start="3539" selection-end="3539" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test.js">
+    <entry file="file://$PROJECT_DIR$/twitApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="306" column="36" selection-start="7642" selection-end="7642" vertical-scroll-proportion="-0.5276074">
-          <folding />
+        <state line="136" column="34" selection-start="3433" selection-end="3433" vertical-scroll-proportion="0.7679558">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

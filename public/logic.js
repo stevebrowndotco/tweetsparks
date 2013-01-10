@@ -1,6 +1,7 @@
 $(function () {
 
     var blobCounter = 0;
+    var searchname = undefined;
     var container;
     var camera, scene, projector, renderer, ray;
 
@@ -143,11 +144,18 @@ $(function () {
         });
 
 
+        socket.on('userLockup', function(data, error){
+            console.log('startStreaming', data, error);
+            _.each(data, function(val, key){
+                if (val.screen_name.toLowerCase() == searchname) {
+                  console.log(val);
+                  changeUser(val);
+                }
+            });
+        });
+
         socket.on('startStreaming', function(data){
-            console.log('startStreaming', data);
-//            $.each(data, function(key, val){
-//                createBlob(val);
-//            });
+          createBlob(data);
         });
 
 
@@ -156,12 +164,14 @@ $(function () {
         // request new streaming
         $("#startButton").on('click', function(e){
             console.log($("#userInput").val());
+            searchname = $("#userInput").val();
             socket.emit('reqnick', $("#userInput").val());
         });
 
         $("#suggestions").on('click', function(e){
             e.preventDefault();
             console.log($(e.target).attr('href'));
+            searchname = $(e.target).attr('href')
             socket.emit('reqnick', $(e.target).attr('href'));
         });
 
@@ -170,6 +180,15 @@ $(function () {
      // insert new image and data on new client request
     function createBlob(data) {
         blob.create(data);
+    }
+
+    function changeUser(data) {
+      $("#screenname").html("<h2>"+data.name+"</h2>");
+      $('#userAvatar').css('background-image', 'url(' + data.profile_image_url + ')');
+      $("#fullName").html(data.name);
+      $("#description").html(data.description);
+      $("#location").html(data.location);
+      $("#followers").html(data.followers_count);
     }
 
     function Blob(item) {
