@@ -52,7 +52,7 @@ var twit = new twitter({
 });
 
 // launch the twitter streaming
-var defaultnick = "ladygaga";
+var defaultnick = "cheese";
 /*Open new stream*/
 var stream = twit.stream('statuses/filter', { track: defaultnick })
 startStreaming(); // <--- start streaming with barackObama

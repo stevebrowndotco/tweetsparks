@@ -102,7 +102,6 @@ $(function () {
         camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
         camera.position.z = 300;
 
-
         scene = new THREE.Scene();
 
         scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
@@ -134,6 +133,12 @@ $(function () {
 
     }
 
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
     function Blob(item) {
 
         this.create = function (item) {
@@ -159,7 +164,7 @@ $(function () {
 
                 particle.data = item;
 
-                values_size[blobCounter] = 64   ;
+                values_size[blobCounter] = 64;
 
                 values_color[blobCounter].setHSV(blobColor+ 0.4, blobColor+ 0.4, 0.8);
 
@@ -177,15 +182,47 @@ $(function () {
 
     }
 
-    function matchRange(number) {
-        var count = 10 * Math.log(number);
-
-        return count;
-    }
-
     function getImportanceColor(number) {
         rgb = (Math.log(number) / 10);
         return rgb;
+    }
+
+    function getIntersection(ray){
+        //these are the available attributes in ray that I can use
+        //ray.origin.x/y/z
+        //ray.direction.x/y/z
+        var threashold=1;
+        var retpoint=false;
+
+        if(group_model.children.length>1){//it's a mesh
+            var intersects = ray.intersectScene( scene );
+            if ( intersects.length > 0 ) {
+                retpoint = intersects[ 0 ].point;//return the closest point
+            }
+        }
+        else{//it's a particlesystem
+            var distance=99999999;
+            for(var i=0;i<group_points.children.length;i++){
+                for(var j=0;j<group_points.children[i].geometry.vertices.length;j++){
+                    var point = group_points.children[i].geometry.vertices[j].position;
+                    var scalar = (point.x - ray.origin.x) / ray.direction.x;
+                    if(scalar<0) continue;//this means the point was behind the camera, so discard
+                    //test the y scalar
+                    var testy = (point.y - ray.origin.y) / ray.direction.y
+                    if(Math.abs(testy - scalar) > threashold) continue;
+                    //test the z scalar
+                    var testz = (point.z - ray.origin.z) / ray.direction.z
+                    if(Math.abs(testz - scalar) > threashold) continue;
+
+                    //if it gets here, we have a hit!
+                    if(distance>scalar){
+                        distance=scalar;
+                        retpoint=point;
+                    }
+                }
+            }
+        }
+        return retpoint;
     }
 
     function animate() {
@@ -247,9 +284,9 @@ $(function () {
         renderer.clear();
         renderer.render(scene, camera);
 
-
-
     }
+
+    window.addEventListener('resize', onWindowResize, false);
 
     init();
     animate();
