@@ -139,12 +139,15 @@ $(function () {
 
         // ---- IO.LISTENER ----
         socket.on('tweets', function (data) {
+            createBlob(data);
+        });
 
-            blob.create(data);
-//            console.log(data);
 
         socket.on('startStreaming', function(data){
             console.log('startStreaming', data);
+//            $.each(data, function(key, val){
+//                createBlob(val);
+//            });
         });
 
 
@@ -164,9 +167,16 @@ $(function () {
 
     }
 
+     // insert new image and data on new client request
+    function createBlob(data) {
+        blob.create(data);
+    }
+
     function Blob(item) {
 
         this.create = function (item) {
+
+            console.log(item);
 
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
@@ -222,15 +232,15 @@ $(function () {
                     $('#selectedTweet').addClass('active', 300, 'swing');
                 }
 
-                console.log(item);
+                console.log('particleItem',item);
 
-                var userImage = item.profile_image_url.replace('_normal','');
+                var userImage = item.data.image;
 
-                $('#selectedTweet .userDetails h2').html(item.screen_name);
-                $('#selectedTweet .userDetails p').html(item.name);
-                $('#selectedTweet .tweetContents p#tweetCopy').html(item.status.text);
-                $('#selectedTweet .tweetContents p#when').html(item.created_at);
-                $('#selectedTweet .userDetails .user-avatar').attr('style','background-image: url('+user_image+')');
+                $('#selectedTweet .userDetails h2').html(item.data.name);
+                $('#selectedTweet .userDetails p').html(item.data.name);
+                $('#selectedTweet .tweetContents p#tweetCopy').html(item.data.text);
+                $('#selectedTweet .tweetContents p#when').html(item.data.created_at);
+                $('#selectedTweet .userDetails .user-avatar').attr('style','background-image: url('+userImage+')');
 
             } else {
                 $('#selectedTweet').removeClass('active', 300, 'swing');
@@ -240,12 +250,25 @@ $(function () {
 
     }
 
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
+    function onDocumentMouseDown( event ) {
+
+        event.preventDefault();
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    }
 
     function animate() {
 
-//        particleSystem.rotation.y += 0.005;
-//        particleSystem.rotation.x += 0.002;
+        particleSystem.rotation.y += 0.0005;
+        particleSystem.rotation.x += 0.0002;
 
         requestAnimationFrame(animate);
         render();
@@ -316,10 +339,6 @@ $(function () {
                 INTERSECTED = intersects[ 0 ].vertex;
 
                 var particleData = particleSystem.geometry.vertices[INTERSECTED];
-
-                attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE * 1.25;
-                attributes.size.needsUpdate = true;
-
                 var isActive;
 
                 if( $('#selectedTweet').hasClass('active') ) {
@@ -334,10 +353,7 @@ $(function () {
 
         } else if ( INTERSECTED !== null ) {
 
-            attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
-            attributes.size.needsUpdate = true;
             INTERSECTED = null;
-
             renderTweetInfo.tweetContent('', false);
 
         }
@@ -347,7 +363,7 @@ $(function () {
     }
 
     window.addEventListener('resize', onWindowResize, false);
-    document.addEventListener( 'mousedown', onDocumentMouseMove, false );
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 
     init();
     animate();
