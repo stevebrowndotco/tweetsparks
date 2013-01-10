@@ -52,11 +52,24 @@ var twit = new twitter({
 });
 
 // launch the twitter streaming
-var defaultnick = "cheese";
+var defaultnick = "barackobama";
+var userLockup = new Array();
+checkUser();
 /*Open new stream*/
-var stream = twit.stream('statuses/filter', { track: defaultnick })
+var stream = twit.stream('statuses/filter', { track: defaultnick });
 startStreaming(); // <--- start streaming with barackObama
 
+
+function checkUser() {
+  twit.get('users/search', { q: defaultnick }, function(err, reply) {
+    for (var i = 0; i < reply.length; i++) {
+      var item = reply[i];
+      if (item.screen_name.toLowerCase() == defaultnick) {
+        userLockup.push(item);
+      }
+    }
+  });
+}
 
 // twit streaming listening for new tweet
 function startStreaming() {
@@ -105,6 +118,7 @@ function normalizeImg(img) {
 io.sockets.on('connection', function (socket) {
   console.log("client connected");
 
+  socket.emit('userStartLockup', userLockup);
   stream.stop();
   twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
     if (reply.statuses) {
@@ -127,8 +141,14 @@ io.sockets.on('connection', function (socket) {
     stream.stop(); // stop the precedent stream
 
     twit.get('users/search', { q: defaultnick }, function(err, reply) {
-      socket.emit('userLockup', reply, err);
-      socket.broadcast.emit('userLockup', reply, err);
+      for (var i = 0; i < reply.length; i++) {
+        var item = reply[i];
+        if (item.screen_name.toLowerCase() == defaultnick) {
+          userLockup[0] = item;
+          socket.emit('userStartLockup', userLockup);
+          socket.broadcast.emit('userStartLockup', userLockup);
+        }
+      }
     });
 
     twit.get('search/tweets', { q: defaultnick }, function(err, reply) {

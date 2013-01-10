@@ -101,9 +101,6 @@ $(function () {
     particleSystem.sortParticles = true;
     particleSystem.dynamic = true;
 
-//    console.log('particleSystem', particleSystem);
-
-    //
 
     function init() {
 
@@ -143,11 +140,16 @@ $(function () {
 //            console.log('startStreaming', data, error);
             _.each(data, function(val, key){
                 if (val.screen_name.toLowerCase() == searchname) {
-//                  console.log(val);
+
                   changeUser(val);
                 }
             });
         });
+
+        socket.on('userStartLockup', function(data, error){
+          console.log('userStartLockup', data, error);
+          changeUser(data[0]);
+        })
 
         socket.on('startStreaming', function(data){
           createBlob(data);
@@ -167,7 +169,6 @@ $(function () {
         $("#suggestions").on('click', function(e){
             e.preventDefault();
             clearScene();
-//            console.log($(e.target).attr('href'));
             searchname = $(e.target).attr('href')
             socket.emit('reqnick', $(e.target).attr('href'));
         });
@@ -195,8 +196,11 @@ $(function () {
     }
 
     function changeUser(data) {
+
+      var image = data.profile_image_url.replace('_normal', '');
+      $('#userAvatar').css('background-image', 'url(' + image + ')');
+
       $("#screenname").html("<h2>"+data.name+"</h2>");
-      $('#userAvatar').css('background-image', 'url(' + data.profile_image_url + ')');
       $("#fullName").html(data.name);
       $("#description").html(data.description);
       $("#location").html(data.location);
@@ -206,8 +210,6 @@ $(function () {
     function Blob(item) {
 
         this.create = function (item) {
-
-//            console.log(item);
 
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
@@ -260,7 +262,6 @@ $(function () {
                     $('#selectedTweet').addClass('active', 300, 'swing');
                 }
 
-//                console.log('particleItem',item);
 
                 var userImage = item.data.image;
 
@@ -318,8 +319,6 @@ $(function () {
             }
 
         } else if ( INTERSECTED !== null ) {
-
-//            console.log('NULL');
 
             INTERSECTED = null;
 
