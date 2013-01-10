@@ -329,8 +329,12 @@ $(function () {
 
         }
 
+
+
         renderer.clear();
         renderer.render(scene, camera);
+
+
 
     }
 
@@ -379,7 +383,6 @@ $(function () {
 
         this.tweetContent = function(item, isActive) {
 
-            alert(isActive);
             if (item) {
 
                 if (isActive == false) {
