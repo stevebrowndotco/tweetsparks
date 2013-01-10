@@ -107,7 +107,13 @@ io.sockets.on('connection', function (socket) {
 
   stream.stop();
   twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
-    socket.emit('startStreaming', formatOutput(reply));
+    if (reply.statuses) {
+      for (var i = 0; i < reply.statuses.length; i++) {
+        element = reply.statuses[i];
+        socket.emit('startStreaming', formatOutput(element));
+        socket.broadcast.emit('startStreaming', formatOutput(element));
+      }
+    }
     stream = twit.stream('statuses/filter', { track: defaultnick });
     startStreaming();
   })
@@ -116,16 +122,23 @@ io.sockets.on('connection', function (socket) {
     console.log('received request : reqnick -> ', nickname);
     // we tell the client to execute 'update Server status' with 1 parameters
 
-    //socket.emit('updatestatus', nickname);
-    //socket.broadcast.emit('updatestatus', nickname);
-
     defaultnick = nickname;
 
     stream.stop(); // stop the precedent stream
-    twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
-      socket.emit('startStreaming', formatOutput(reply));
-      socket.broadcast.emit('startStreaming', formatOutput(reply));
 
+    twit.get('users/search', { q: defaultnick }, function(err, reply) {
+      socket.emit('userLockup', reply, err);
+      socket.broadcast.emit('userLockup', reply, err);
+    });
+
+    twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
+      if (reply.statuses) {
+        for (var i = 0; i < reply.statuses.length; i++) {
+          element = reply.statuses[i];
+          socket.emit('startStreaming', formatOutput(element));
+          socket.broadcast.emit('startStreaming', formatOutput(element));
+        }
+      }
       stream = twit.stream('statuses/filter', { track: nickname }); // assign new search
       startStreaming();
     });
