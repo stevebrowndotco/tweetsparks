@@ -75,7 +75,7 @@ $(function () {
     var values_size = attributes.size.value;
     var values_color = attributes.customColor.value;
 
-    var radius = 500;
+    var radius = 10;
 
     for (var p = 0; p < particleCount; p++) {
 
@@ -86,7 +86,7 @@ $(function () {
 
         particle.data = [];
 
-        particle.multiplyScalar( radius );
+//        particle.multiplyScalar( radius );
 
         geometry.vertices.push(particle);
 
@@ -100,25 +100,22 @@ $(function () {
     particleSystem.sortParticles = true;
     particleSystem.dynamic = true;
 
-//    console.log('particleSystem', particleSystem);
+    console.log('particleSystem', particleSystem);
 
     //
 
     function init() {
 
-//        ray = new THREE.Ray();
-
         camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
         camera.position.z = 300;
 
-
         scene = new THREE.Scene();
 
-        scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
+//        scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
 
         projector = new THREE.Projector();
 
-        renderer = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1 } );
+        renderer = new THREE.WebGLRenderer( { clearColor: 0x111111, clearAlpha: 1 } );
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -129,8 +126,6 @@ $(function () {
         light.position.set( 170, 330, -160 );
 
         scene.add(light);
-
-
 
         // Socket.IO listener and sender
         var socket = io.connect('http://localhost:3000');
@@ -180,9 +175,6 @@ $(function () {
 
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
-
-//            console.log(blobColor);
-
 
             if (blobCounter < geometry.vertices.length) {
 
@@ -309,8 +301,8 @@ $(function () {
 
     function animate() {
 
-        particleSystem.rotation.y += 0.0005;
-        particleSystem.rotation.x += 0.0002;
+        particleSystem.rotation.y += 0.005;
+        particleSystem.rotation.x += 0.002;
 
         requestAnimationFrame(animate);
         render();
@@ -392,7 +384,7 @@ $(function () {
 
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-//    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
     init();
     animate();
