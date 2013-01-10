@@ -141,8 +141,14 @@ io.sockets.on('connection', function (socket) {
     stream.stop(); // stop the precedent stream
 
     twit.get('users/search', { q: defaultnick }, function(err, reply) {
-      socket.emit('userLockup', reply, err);
-      socket.broadcast.emit('userLockup', reply, err);
+      for (var i = 0; i < reply.length; i++) {
+        var item = reply[i];
+        if (item.screen_name.toLowerCase() == defaultnick) {
+          userLockup[0] = item;
+          socket.emit('userStartLockup', userLockup);
+          socket.broadcast.emit('userStartLockup', userLockup);
+        }
+      }
     });
 
     twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
