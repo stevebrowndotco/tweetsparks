@@ -1,456 +1,256 @@
 $(function () {
 
-    //
-
-    var twitterApi = new TwitterApi();
-
-    //
-
-    var getUserInfo;
-
-
-    //
-
-    var user = 'stevebrowndotco';
-
-    //
-
-    var container, stats;
+    var blobCounter = 0;
+    var container;
     var camera, scene, projector, renderer;
-    var fastRotating = true;
 
-    var material_depth, cubeMaterial;
-    var PI2 = Math.PI * 2;
-    var postprocessing = { enabled:false };
+    var light = new THREE.SpotLight();
 
-    var height = window.innerHeight - 300;
-
-    var programFill = function (context) {
-        context.beginPath();
-        context.arc(0, 0, 1.05, 0, PI2, true);
-        context.closePath();
-        context.fill();
-    }
-
-    var programStroke = function (context) {
-        context.lineWidth = 0.05;
-        context.beginPath();
-        context.arc(0, 0, 1, 0, PI2, true);
-        context.closePath();
-        context.fill();
-        context.stroke();
-    }
-
-    var mouse = { x:0, y:0 }, INTERSECTED;
-    var popupText;
+    //
 
     var radius = 600;
     var theta = 0;
+
+    //
+
+    var WIDTH = window.innerWidth;
+    var HEIGHT = window.innerHeight;
+
+    //
 
     var blob = new Blob();
 
     //
 
-    var renderTweetInfo = new RenderTweetInfo();
+    var height = window.innerHeight - 300;
+    var postprocessing = { enabled  : true };
 
-    function setupUser(user) {
+    var particleCount = 10000;
 
-        //Initial Query
+    var sprite = THREE.ImageUtils.loadTexture( "/public/img/spark.png" );
 
-        var followers = 0;
+    var geometry = new THREE.Geometry();
+
+    var attributes, uniforms;
+
+    // SHADER
+
+    attributes = {
+
+        size: {	type: 'f', value: [] },
+        customColor: { type: 'c', value: [] }
+
+    };
+
+    uniforms = {
+
+        amplitude: { type: "f", value: 1.0 },
+        color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+        texture:   { type: "t", value: sprite }
+
+    };
+
+    var shader = new THREE.ShaderMaterial( {
+
+        uniforms: 		uniforms,
+        attributes:     attributes,
+        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+        blending: 		THREE.AdditiveBlending,
+        depthTest: 		true,
+        transparent:	true
+
+    });
 
 
-        getUserInfo = twitterApi.response('users/show.json?screen_name=' + user, function (item) {
+    //
 
-            followers = item.followers_count;
+    var values_size = attributes.size.value;
+    var values_color = attributes.customColor.value;
 
-            var userImage = item.profile_image_url.replace('_normal', '');
+    var radius = 500;
 
-            $('#userAvatar').attr('style', 'background-image: url(' + userImage + ')');
+    for (var p = 0; p < particleCount; p++) {
 
-            $('#userInfo h2').html(item.screen_name);
-            $('#userInfo #fullName').html(item.name);
-            $('#userInfo #description').html(item.description);
-            $('#userInfo #followers .value').html(item.followers_count);
-            $('#userInfo #location .value').html(item.location);
+        var particle = new THREE.Vector3(-9999, 1, 1  );
 
-        })
+        values_size[ p ] = 10;
+        values_color[ p ] = new THREE.Color( 0xf6004f);
 
+        particle.data = [];
 
-        var socket = io.connect('http://localhost:3000');
-        socket.on('tweets', function (data) {
-            renderTweet(data)
-        });
+        particle.multiplyScalar( radius );
+
+        geometry.vertices.push(particle);
 
     }
+
+    var particleSystem = new THREE.ParticleSystem(geometry, shader);
+
+    particleSystem.geometry.__dirtyVertices = true;
+    particleSystem.geometry.__dirtyElements = true;
+    particleSystem.geometry.verticesNeedUpdate = true;
+    particleSystem.sortParticles = true;
+    particleSystem.dynamic = true;
+
+    console.log('particleSystem', particleSystem);
+
+    //
 
     function init() {
 
-        // Set the Camera
+        camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
+        camera.position.z = 300;
 
-        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
-        camera.position.set(0, 300, 500);
-
-        // Set the scene
 
         scene = new THREE.Scene();
 
-        // Set the projector
+        scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
 
         projector = new THREE.Projector();
 
-        // Set the renderer
+        renderer = new THREE.WebGLRenderer();
 
-        renderer = new THREE.CanvasRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Add to DOM
+        initPostprocessing();
 
         $('#container').html(renderer.domElement);
 
-        // Material Depth
+        light.position.set( 170, 330, -160 );
 
-        material_depth = new THREE.MeshDepthMaterial();
+        scene.add(light);
 
-        //Popup Text
+        var socket = io.connect('http://localhost:3000');
 
-        popupText = new PopupText();
+        scene.add(particleSystem);
 
-        //Event Listeners
+        socket.on('tweets', function (data) {
 
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
-        document.addEventListener('mousedown', onDocumentMouseDown, false);
+            blob.create(data);
+            console.log(data);
 
-        //
-
-        window.addEventListener('resize', onWindowResize, false);
-
-
-        initPostprocessing();
-    }
-
-    //
-
-    function TwitterApi() {
-
-        var twitterApiVersion = 1;
-
-        this.apiUrl = 'http://api.twitter.com/' + twitterApiVersion + '/';
-        this.response = function (query, callback) {
-
-            query += '&include_entities=1&callback=?';
-
-            $.getJSON(this.apiUrl + query,
-                function (data) {
-                    callback(data);
-                }
-            );
-
-        };
+        });
 
     }
-
-    function renderTweet(item) {
-        blob.create(item);
-
-        importanceColor = getImportanceColor(item.followers_count);
-        followersCount = getFollowersCount(item.followers_count, 255)
-    }
-
-    function getFollowersCount(number, limit) {
-        count = Math.floor(4 * (Math.log(number)))
-        return count;
-    }
-
-    function getImportanceColor(number) {
-        rgb = 255 - Math.floor(16 * (Math.log(number + 1) + 1));
-        return 'rgb(' + rgb + ',0,0)';
-    }
-
-    //
-
 
     function Blob(item) {
 
         this.create = function (item) {
 
-            var blobSize = getFollowersCount(item.followers, 255);
+            var blobSize = item.followers;
+            var blobColor = getImportanceColor(item.followers);
 
-            var particle = new THREE.Particle(new THREE.ParticleCanvasMaterial({ color:Math.random() * 0x808080 + 0x808080, program:programStroke }));
-            particle.position.x = Math.random() * 800 - 400;
-            particle.position.y = Math.random() * 800 - 400;
-            particle.position.z = Math.random() * 800 - 400;
-            particle.scale.x = particle.scale.y = blobSize;
-            particle.data = item;
+            console.log(blobColor);
 
-            scene.add(particle);
+
+            if (blobCounter < geometry.vertices.length) {
+
+                var pX = Math.random() * 500 - 250,
+                    pY = Math.random() * 500 - 250,
+                    pZ = Math.random() * 500 - 250
+
+                var particle = geometry.vertices[blobCounter];
+                blobCounter++;
+
+                particle.x = pX;
+                particle.y = pY;
+                particle.z = pZ;
+
+                particle.data = item;
+
+                values_size[blobCounter] = 64   ;
+
+                values_color[blobCounter].setHSV(blobColor+ 0.4, blobColor+ 0.4, 0.8);
+
+                particleSystem.geometry.__dirtyVertices = true;
+
+            }
 
         }
 
         this.destroy = function () {
+
             scene.remove(item);
+
         }
 
     }
 
-    function PopupText(data) {
+    function matchRange(number) {
+        var count = 10 * Math.log(number);
 
-        this.create = function (data) {
-            $('#twitterPopup').html('<p>' + data.screen_name + '</p>');
-        }
-
-        this.destroy = function () {
-            $('#twitterPopup').empty();
-        }
-
+        return count;
     }
 
-    // HELPER
-
-    function addCommas(nStr) {
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    }
-
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    function onDocumentMouseMove(event) {
-        event.preventDefault();
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
-    }
-
-    //
-
-    function initPostprocessing() {
-
-        postprocessing.scene = new THREE.Scene();
-
-        postprocessing.camera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -10000, 10000);
-        postprocessing.camera.position.z = 100;
-
-        postprocessing.scene.add(postprocessing.camera);
-
-        var pars = { minFilter:THREE.LinearFilter, magFilter:THREE.LinearFilter, format:THREE.RGBFormat };
-        postprocessing.rtTextureDepth = new THREE.WebGLRenderTarget(window.innerWidth, height, pars);
-        postprocessing.rtTextureColor = new THREE.WebGLRenderTarget(window.innerWidth, height, pars);
-
-        var bokeh_shader = THREE.BokehShader;
-
-        postprocessing.bokeh_uniforms = THREE.UniformsUtils.clone(bokeh_shader.uniforms);
-
-        postprocessing.bokeh_uniforms[ "tColor" ].value = postprocessing.rtTextureColor;
-        postprocessing.bokeh_uniforms[ "tDepth" ].value = postprocessing.rtTextureDepth;
-        postprocessing.bokeh_uniforms[ "focus" ].value = 1.1;
-        postprocessing.bokeh_uniforms[ "aspect" ].value = window.innerWidth / height;
-
-        postprocessing.materialBokeh = new THREE.ShaderMaterial({
-
-            uniforms:postprocessing.bokeh_uniforms,
-            vertexShader:bokeh_shader.vertexShader,
-            fragmentShader:bokeh_shader.fragmentShader
-
-        });
-
-        postprocessing.quad = new THREE.Mesh(new THREE.PlaneGeometry(window.innerWidth, window.innerHeight), postprocessing.materialBokeh);
-        postprocessing.quad.position.z = -500;
-        postprocessing.scene.add(postprocessing.quad);
-
+    function getImportanceColor(number) {
+        rgb = (Math.log(number) / 10);
+        return rgb;
     }
 
     function animate() {
+
+        particleSystem.rotation.y += 0.005;
+        particleSystem.rotation.x += 0.002;
 
         requestAnimationFrame(animate);
         render();
 
     }
 
+    function initPostprocessing() {
+
+        postprocessing.scene = new THREE.Scene();
+
+        postprocessing.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2,  window.innerHeight / 2, window.innerHeight / - 2, -10000, 10000 );
+        postprocessing.camera.position.z = 100;
+
+        postprocessing.scene.add( postprocessing.camera );
+
+        var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+        postprocessing.rtTextureDepth = new THREE.WebGLRenderTarget( window.innerWidth, height, pars );
+        postprocessing.rtTextureColor = new THREE.WebGLRenderTarget( window.innerWidth, height, pars );
+
+        var bokeh_shader = THREE.BokehShader;
+
+        postprocessing.bokeh_uniforms = THREE.UniformsUtils.clone( bokeh_shader.uniforms );
+
+        postprocessing.bokeh_uniforms[ "tColor" ].value = postprocessing.rtTextureColor;
+        postprocessing.bokeh_uniforms[ "tDepth" ].value = postprocessing.rtTextureDepth;
+        postprocessing.bokeh_uniforms[ "focus" ].value = 1.1;
+        postprocessing.bokeh_uniforms[ "aspect" ].value = window.innerWidth / height;
+
+        postprocessing.materialBokeh = new THREE.ShaderMaterial( {
+
+            uniforms: postprocessing.bokeh_uniforms,
+            vertexShader: bokeh_shader.vertexShader,
+            fragmentShader: bokeh_shader.fragmentShader
+
+        } );
+
+        postprocessing.quad = new THREE.Mesh( new THREE.PlaneGeometry( window.innerWidth, window.innerHeight ), postprocessing.materialBokeh );
+        postprocessing.quad.position.z = - 500;
+        postprocessing.scene.add( postprocessing.quad );
+
+    }
+
     function render() {
 
-        // rotate camera
-
-        if (fastRotating == true) {
-            theta += 0.2;
-        } else {
-            theta += 0.05
-        }
+        theta += 0.05;
 
         camera.position.x = radius * Math.sin(theta * Math.PI / 360);
         camera.position.y = radius * Math.sin(theta * Math.PI / 360);
         camera.position.z = radius * Math.cos(theta * Math.PI / 360);
+
         camera.lookAt(scene.position);
 
-        // find intersections
-
-        camera.updateMatrixWorld();
-
-        var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-        projector.unprojectVector(vector, camera);
-
-        var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
-
-        var intersects = ray.intersectObjects(scene.children);
-
-        if (intersects.length > 0) {
-
-            if (INTERSECTED != intersects[ 0 ].object) {
-
-                if (INTERSECTED) INTERSECTED.material.program = programStroke;
-                INTERSECTED = intersects[ 0 ].object;
-                INTERSECTED.material.program = programFill;
-                popupText.create(INTERSECTED.data);
-
-                $('body').css('cursor', 'pointer');
-                fastRotating = false;
-
-            }
-
-        } else {
-
-            if (INTERSECTED) INTERSECTED.material.program = programStroke;
-            INTERSECTED = null;
-            fastRotating = true;
-            $('body').css('cursor', 'inherit');
-
-            popupText.destroy();
-
-        }
-
-        if (postprocessing.enabled) {
-
-            renderer.clear();
-
-            // Render scene into texture
-
-            scene.overrideMaterial = null;
-            renderer.render(scene, camera, postprocessing.rtTextureColor, true);
-
-            // Render depth into texture
-
-            scene.overrideMaterial = material_depth;
-            renderer.render(scene, camera, postprocessing.rtTextureDepth, true);
-
-            // Render bokeh composite
-
-            renderer.render(postprocessing.scene, postprocessing.camera);
+        renderer.clear();
+        renderer.render(scene, camera);
 
 
-        } else {
-
-            renderer.clear();
-            renderer.render(scene, camera);
-
-        }
 
     }
 
-    $('#startButton').bind('click', function () {
-        user = $('#userInput').val();
-        clearScene();
-        setupUser(user);
-
-    })
-
-    $('#userInput').keypress(function (e) {
-        user = $('#userInput').val();
-        if (e.which == 13) {
-            clearScene();
-            setupUser(user);
-        }
-    });
-
-    function clearScene() {
-
-        var obj, i;
-        for (i = scene.children.length - 1; i >= 0; i--) {
-            obj = scene.children[ i ];
-            scene.remove(obj);
-        }
-
-    }
-
-    function onDocumentMouseDown(event) {
-
-        /* 	event.preventDefault(); */
-
-        camera.updateMatrixWorld();
-
-        var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-        projector.unprojectVector(vector, camera);
-
-        var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
-
-        var intersects = ray.intersectObjects(scene.children);
-
-        if (intersects.length > 0) {
-
-            var isActive;
-
-            if ($('#selectedTweet').hasClass('active')) {
-                isActive = true;
-            } else {
-                isActive = false;
-            }
-
-            renderTweetInfo.tweetContent(INTERSECTED.data, isActive);
-
-        } else {
-
-            renderTweetInfo.tweetContent('', false);
-
-        }
-
-    }
-
-    function RenderTweetInfo(item, isActive) {
-
-        this.tweetContent = function (item, isActive) {
-
-            if (item) {
-
-                if (isActive == false) {
-                    $('#selectedTweet').addClass('active', 300, 'swing');
-                }
-
-                var userImage = item.profile_image_url.replace('_normal', '');
-
-                console.log(item);
-                $('#selectedTweet .userDetails h2').html(item.screen_name);
-                $('#selectedTweet .userDetails p').html(item.name);
-                $('#selectedTweet .tweetContents p#tweetCopy').html(item.status.text);
-                $('#selectedTweet .tweetContents p#when').html(item.created_at);
-                $('#selectedTweet .userDetails .user-avatar').attr('style', 'background-image: url(' + userImage + ')');
-
-            } else {
-                $('#selectedTweet').removeClass('active', 300, 'swing');
-            }
-
-        }
-
-    }
-
-    $('#suggestions a').bind('click', function (e) {
-        e.preventDefault();
-        clearScene();
-
-        var selectedUser = $(e.target).attr('href');
-        setupUser(selectedUser);
-    })
-
-    // Initiate the app
-
-    setupUser(user);
     init();
     animate();
 
