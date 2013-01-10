@@ -101,7 +101,7 @@ $(function () {
     particleSystem.sortParticles = true;
     particleSystem.dynamic = true;
 
-    console.log('particleSystem', particleSystem);
+    // console.log('particleSystem', particleSystem);
 
     //
 
@@ -143,11 +143,15 @@ $(function () {
             console.log('startStreaming', data, error);
             _.each(data, function(val, key){
                 if (val.screen_name.toLowerCase() == searchname) {
-                  console.log(val);
                   changeUser(val);
                 }
             });
         });
+
+        socket.on('userStartLockup', function(data, error){
+          console.log('userStartLockup', data, error);
+          changeUser(data[0]);
+        })
 
         socket.on('startStreaming', function(data){
           createBlob(data);
@@ -158,14 +162,14 @@ $(function () {
 
         // request new streaming
         $("#startButton").on('click', function(e){
-            console.log($("#userInput").val());
+            // console.log($("#userInput").val());
             searchname = $("#userInput").val();
             socket.emit('reqnick', $("#userInput").val());
         });
 
         $("#suggestions").on('click', function(e){
             e.preventDefault();
-            console.log($(e.target).attr('href'));
+            // console.log($(e.target).attr('href'));
             searchname = $(e.target).attr('href')
             socket.emit('reqnick', $(e.target).attr('href'));
         });
@@ -178,8 +182,11 @@ $(function () {
     }
 
     function changeUser(data) {
+
+      var image = data.profile_image_url.replace('_normal', '');
+      $('#userAvatar').css('background-image', 'url(' + image + ')');
+
       $("#screenname").html("<h2>"+data.name+"</h2>");
-      $('#userAvatar').css('background-image', 'url(' + data.profile_image_url + ')');
       $("#fullName").html(data.name);
       $("#description").html(data.description);
       $("#location").html(data.location);
@@ -190,7 +197,7 @@ $(function () {
 
         this.create = function (item) {
 
-            console.log(item);
+            // console.log(item);
 
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
@@ -243,7 +250,7 @@ $(function () {
                     $('#selectedTweet').addClass('active', 300, 'swing');
                 }
 
-                console.log('particleItem',item);
+                // console.log('particleItem',item);
 
                 var userImage = item.data.image;
 
@@ -302,7 +309,7 @@ $(function () {
 
         } else if ( INTERSECTED !== null ) {
 
-            console.log('NULL');
+            // console.log('NULL');
 
             INTERSECTED = null;
 
