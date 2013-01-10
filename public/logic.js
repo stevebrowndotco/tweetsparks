@@ -159,6 +159,7 @@ $(function () {
         // request new streaming
         $("#startButton").on('click', function(e){
 //            console.log($("#userInput").val());
+            clearScene();
             searchname = $("#userInput").val();
             socket.emit('reqnick', $("#userInput").val());
         });
@@ -285,7 +286,7 @@ $(function () {
 
     function onDocumentMouseDown( event ) {
 
-        event.preventDefault();
+//        event.preventDefault();
 
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -329,9 +330,11 @@ $(function () {
     }
 
     function onDocumentMouseMove(event) {
+
         event.preventDefault();
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
     }
 
     function animate() {
@@ -340,6 +343,7 @@ $(function () {
         particleSystem.rotation.x += 0.002;
 
         requestAnimationFrame(animate);
+
         render();
 
     }
