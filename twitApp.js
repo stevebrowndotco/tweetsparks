@@ -72,10 +72,13 @@ function formatOutput(tweet) {
 
     var glTweet = {};
     glTweet._id = tweet.id;
+    glTweet.original = tweet;
     if (tweet.user != undefined ) {
       glTweet.followers = tweet.user.followers_count;
       glTweet.text = tweet.text;
       glTweet.user = tweet.user.name;
+      glTweet.image = normalizeImg(tweet.user.profile_image_url);
+      glTweet.created_at = tweet.created_at;
     } else {
       glTweet.followers = null;
       glTweet.text = null;
@@ -88,6 +91,14 @@ function formatOutput(tweet) {
     return tweet;
   }
 }
+
+
+function normalizeImg(img) {
+
+  var normalized = img.replace('_replace', '');
+
+  return normalized;
+};
 
 
 // client connected
@@ -104,19 +115,21 @@ io.sockets.on('connection', function (socket) {
   socket.on('reqnick', function (nickname) {
     console.log('received request : reqnick -> ', nickname);
     // we tell the client to execute 'update Server status' with 1 parameters
-    socket.emit('updatestatus', nickname);
-    socket.broadcast.emit('updatestatus', nickname);
+
+    //socket.emit('updatestatus', nickname);
+    //socket.broadcast.emit('updatestatus', nickname);
 
     defaultnick = nickname;
 
+    stream.stop(); // stop the precedent stream
     twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
       socket.emit('startStreaming', formatOutput(reply));
       socket.broadcast.emit('startStreaming', formatOutput(reply));
-    })
 
-    stream.stop(); // stop the precedent stream
-    stream = twit.stream('statuses/filter', { track: nickname }); // assign new search
-    startStreaming();
+      stream = twit.stream('statuses/filter', { track: nickname }); // assign new search
+      startStreaming();
+    });
+
   });
 
 // client disconnected

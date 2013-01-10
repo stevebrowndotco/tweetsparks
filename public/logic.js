@@ -121,16 +121,42 @@ $(function () {
 
         scene.add(light);
 
+
+
+        // Socket.IO listener and sender
         var socket = io.connect('http://localhost:3000');
 
         scene.add(particleSystem);
 
+        // ---- IO.LISTENER ----
         socket.on('tweets', function (data) {
-
-            blob.create(data);
             console.log(data);
-
+            blob.create(data);
         });
+
+        socket.on('startStreaming', function(data){
+            console.log('startStreaming', data);
+        });
+
+
+        // ---- IO.SENDER ----
+
+        // request new streaming
+        $("#startButton").on('click', function(e){
+            console.log($("#userInput").val());
+            socket.emit('reqnick', $("#userInput").val());
+        });
+
+        $("#suggestions").on('click', function(e){
+            e.preventDefault();
+            console.log($(e.target).attr('href'));
+            socket.emit('reqnick', $(e.target).attr('href'));
+        });
+
+    }
+
+     // insert new image and data on new client request
+    function changeClient(data) {
 
     }
 
@@ -246,8 +272,6 @@ $(function () {
 
         renderer.clear();
         renderer.render(scene, camera);
-
-
 
     }
 
