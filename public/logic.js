@@ -2,7 +2,7 @@ $(function () {
 
     var blobCounter = 0;
     var container;
-    var camera, scene, projector, renderer;
+    var camera, scene, projector, renderer, ray;
 
     var light = new THREE.SpotLight();
 
@@ -18,7 +18,14 @@ $(function () {
 
     //
 
+    var mouse = { x: 0, y: 0 }, INTERSECTED;
+    var PARTICLE_SIZE = 20;
+
+    //
+
     var blob = new Blob();
+
+    var renderTweetInfo = new RenderTweetInfo();
 
     //
 
@@ -93,11 +100,13 @@ $(function () {
     particleSystem.sortParticles = true;
     particleSystem.dynamic = true;
 
-    console.log('particleSystem', particleSystem);
+//    console.log('particleSystem', particleSystem);
 
     //
 
     function init() {
+
+        ray = new THREE.Ray();
 
         camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
         camera.position.z = 300;
@@ -127,7 +136,7 @@ $(function () {
         socket.on('tweets', function (data) {
 
             blob.create(data);
-            console.log(data);
+//            console.log(data);
 
         });
 
@@ -139,6 +148,15 @@ $(function () {
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+    function onDocumentMouseMove( event ) {
+
+        event.preventDefault();
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    }
+
     function Blob(item) {
 
         this.create = function (item) {
@@ -146,7 +164,7 @@ $(function () {
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
 
-            console.log(blobColor);
+//            console.log(blobColor);
 
 
             if (blobCounter < geometry.vertices.length) {
@@ -187,48 +205,40 @@ $(function () {
         return rgb;
     }
 
-    function getIntersection(ray){
-        //these are the available attributes in ray that I can use
-        //ray.origin.x/y/z
-        //ray.direction.x/y/z
-        var threashold=1;
-        var retpoint=false;
+    function RenderTweetInfo() {
 
-        if(group_model.children.length>1){//it's a mesh
-            var intersects = ray.intersectScene( scene );
-            if ( intersects.length > 0 ) {
-                retpoint = intersects[ 0 ].point;//return the closest point
-            }
-        }
-        else{//it's a particlesystem
-            var distance=99999999;
-            for(var i=0;i<group_points.children.length;i++){
-                for(var j=0;j<group_points.children[i].geometry.vertices.length;j++){
-                    var point = group_points.children[i].geometry.vertices[j].position;
-                    var scalar = (point.x - ray.origin.x) / ray.direction.x;
-                    if(scalar<0) continue;//this means the point was behind the camera, so discard
-                    //test the y scalar
-                    var testy = (point.y - ray.origin.y) / ray.direction.y
-                    if(Math.abs(testy - scalar) > threashold) continue;
-                    //test the z scalar
-                    var testz = (point.z - ray.origin.z) / ray.direction.z
-                    if(Math.abs(testz - scalar) > threashold) continue;
+        this.tweetContent = function(item, isActive) {
 
-                    //if it gets here, we have a hit!
-                    if(distance>scalar){
-                        distance=scalar;
-                        retpoint=point;
-                    }
+            if (item) {
+
+                if (isActive == false) {
+                    $('#selectedTweet').addClass('active', 300, 'swing');
                 }
+
+                console.log(item);
+
+                var userImage = item.profile_image_url.replace('_normal','');
+
+                $('#selectedTweet .userDetails h2').html(item.screen_name);
+                $('#selectedTweet .userDetails p').html(item.name);
+                $('#selectedTweet .tweetContents p#tweetCopy').html(item.status.text);
+                $('#selectedTweet .tweetContents p#when').html(item.created_at);
+                $('#selectedTweet .userDetails .user-avatar').attr('style','background-image: url('+user_image+')');
+
+            } else {
+                $('#selectedTweet').removeClass('active', 300, 'swing');
             }
+
         }
-        return retpoint;
+
     }
+
+
 
     function animate() {
 
-        particleSystem.rotation.y += 0.005;
-        particleSystem.rotation.x += 0.002;
+//        particleSystem.rotation.y += 0.005;
+//        particleSystem.rotation.x += 0.002;
 
         requestAnimationFrame(animate);
         render();
@@ -273,20 +283,64 @@ $(function () {
 
     function render() {
 
-        theta += 0.05;
-
-        camera.position.x = radius * Math.sin(theta * Math.PI / 360);
-        camera.position.y = radius * Math.sin(theta * Math.PI / 360);
-        camera.position.z = radius * Math.cos(theta * Math.PI / 360);
+//        theta += 0.05;
+//
+//        camera.position.x = radius * Math.sin(theta * Math.PI / 360);
+//        camera.position.y = radius * Math.sin(theta * Math.PI / 360);
+//        camera.position.z = radius * Math.cos(theta * Math.PI / 360);
 
         camera.lookAt(scene.position);
 
         renderer.clear();
+
+        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+        projector.unprojectVector( vector, camera );
+
+        ray.setOrigin( camera.position ).setDirection( vector.subSelf( camera.position ).normalize() );
+
+        var intersects = ray.intersectObjects( [particleSystem] );
+
+        if ( intersects.length > 0 ) {
+
+            if ( INTERSECTED != intersects[ 0 ].vertex ) {
+
+                attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
+
+                INTERSECTED = intersects[ 0 ].vertex;
+
+                var particleData = particleSystem.geometry.vertices[INTERSECTED];
+
+                attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE * 1.25;
+                attributes.size.needsUpdate = true;
+
+                var isActive;
+
+                if( $('#selectedTweet').hasClass('active') ) {
+                    isActive = true;
+                } else {
+                    isActive = false;
+                }
+
+                renderTweetInfo.tweetContent(particleData, isActive);
+
+            }
+
+        } else if ( INTERSECTED !== null ) {
+
+            attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
+            attributes.size.needsUpdate = true;
+            INTERSECTED = null;
+
+            renderTweetInfo.tweetContent('', false);
+
+        }
+
         renderer.render(scene, camera);
 
     }
 
     window.addEventListener('resize', onWindowResize, false);
+    document.addEventListener( 'mousedown', onDocumentMouseMove, false );
 
     init();
     animate();
