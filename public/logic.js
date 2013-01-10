@@ -111,6 +111,7 @@ $(function () {
         camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
         camera.position.z = 300;
 
+
         scene = new THREE.Scene();
 
         scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
@@ -129,31 +130,37 @@ $(function () {
 
         scene.add(light);
 
+
+
+        // Socket.IO listener and sender
         var socket = io.connect('http://localhost:3000');
 
         scene.add(particleSystem);
 
+        // ---- IO.LISTENER ----
         socket.on('tweets', function (data) {
 
             blob.create(data);
 //            console.log(data);
 
+        socket.on('startStreaming', function(data){
+            console.log('startStreaming', data);
         });
 
-    }
 
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+        // ---- IO.SENDER ----
 
-    function onDocumentMouseMove( event ) {
+        // request new streaming
+        $("#startButton").on('click', function(e){
+            console.log($("#userInput").val());
+            socket.emit('reqnick', $("#userInput").val());
+        });
 
-        event.preventDefault();
-
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        $("#suggestions").on('click', function(e){
+            e.preventDefault();
+            console.log($(e.target).attr('href'));
+            socket.emit('reqnick', $(e.target).attr('href'));
+        });
 
     }
 
