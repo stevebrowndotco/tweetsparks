@@ -287,25 +287,21 @@ $(function () {
 
     function onDocumentMouseDown( event ) {
 
-//        event.preventDefault();
+        camera.updateMatrixWorld();
 
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
-        projector.unprojectVector( vector, camera );
+        var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+        projector.unprojectVector(vector, camera);
 
         var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
 
-        var intersects = ray.intersectObjects( [particleSystem] );
+        var intersects = ray.intersectObjects(scene.children);
 
-        if ( intersects.length > 0 ) {
+        if (intersects.length > 0) {
 
             if ( INTERSECTED != intersects[ 0 ].vertex ) {
 
                 INTERSECTED = intersects[ 0 ].vertex;
 
-                var particleData = particleSystem.geometry.vertices[INTERSECTED];
                 var isActive;
 
                 if( $('#selectedTweet').hasClass('active') ) {
@@ -314,13 +310,13 @@ $(function () {
                     isActive = false;
                 }
 
+                var particleData = particleSystem.geometry.vertices[INTERSECTED];
+
                 renderTweetInfo.tweetContent(particleData, isActive);
 
             }
 
-        } else if ( INTERSECTED !== null ) {
-
-            INTERSECTED = null;
+        } else {
 
             renderTweetInfo.tweetContent('', false);
 
@@ -338,11 +334,7 @@ $(function () {
 
     function animate() {
 
-        particleSystem.rotation.y += 0.005;
-        particleSystem.rotation.x += 0.002;
-
         requestAnimationFrame(animate);
-
         render();
 
     }
@@ -385,6 +377,8 @@ $(function () {
 
     function render() {
 
+
+
 //        theta += 0.05;
 //
 //        camera.position.x = radius * Math.sin(theta * Math.PI / 360);
@@ -395,34 +389,45 @@ $(function () {
 
         renderer.clear();
 
-        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
-        projector.unprojectVector( vector, camera );
+        //
+
+        var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+        projector.unprojectVector(vector, camera);
 
         var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
 
-        var intersects = ray.intersectObjects( [particleSystem] );
+        var intersects = ray.intersectObjects(scene.children);
 
-        if ( intersects.length > 0 ) {
+        if (intersects.length > 0) {
 
-            if ( INTERSECTED != intersects[ 0 ].vertex ) {
+            console.log('intersected!');
 
-                INTERSECTED = intersects[ 0 ].vertex;
+            particleSystem.rotation.y += 0.001;
+            particleSystem.rotation.x += 0.001;
 
-            }
+            $('body').css('cursor','pointer');
 
-        } else if ( INTERSECTED !== null ) {
 
-            INTERSECTED = null;
+
+        } else {
+
+            particleSystem.rotation.y += 0.005;
+            particleSystem.rotation.x += 0.002;
+
+            $('body').css('cursor','inherit');
 
         }
+
+        //
 
         renderer.render(scene, camera);
 
     }
 
     window.addEventListener('resize', onWindowResize, false);
-    document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 
     init();
     animate();
