@@ -131,11 +131,14 @@ $(function () {
         // ---- IO.LISTENER ----
         socket.on('tweets', function (data) {
             console.log(data);
-            blob.create(data);
+            createBlob(data);
         });
 
         socket.on('startStreaming', function(data){
             console.log('startStreaming', data);
+            $.each(data, function(key, val){
+                createBlob(val);
+            });
         });
 
 
@@ -156,8 +159,8 @@ $(function () {
     }
 
      // insert new image and data on new client request
-    function changeClient(data) {
-
+    function createBlob(data) {
+        blob.create(data);
     }
 
     function Blob(item) {

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9458a3d7-77c7-4fc7-889b-4da976270b7c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/logic.js" afterPath="$PROJECT_DIR$/public/logic.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitApp.js" afterPath="$PROJECT_DIR$/twitApp.js" />
     </list>
     <ignored path="node-twitter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,10 +34,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="twitApp.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="twitApp.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/twitApp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="47" selection-start="2309" selection-end="2309" vertical-scroll-proportion="0.73480666">
+            <state line="104" column="47" selection-start="2309" selection-end="2309" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -46,10 +45,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="logic.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="logic.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/logic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="42" selection-start="2866" selection-end="2866" vertical-scroll-proportion="0.0">
+            <state line="139" column="32" selection-start="3122" selection-end="3122" vertical-scroll-proportion="0.44506726">
               <folding />
             </state>
           </provider>
@@ -378,19 +377,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/logic.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="42" selection-start="2866" selection-end="2866" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/twitApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="47" selection-start="2309" selection-end="2309" vertical-scroll-proportion="0.73480666">
+        <state line="104" column="47" selection-start="2309" selection-end="2309" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/logic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="32" selection-start="3122" selection-end="3122" vertical-scroll-proportion="0.44506726">
+          <folding />
         </state>
       </provider>
     </entry>
