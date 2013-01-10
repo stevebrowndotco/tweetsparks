@@ -119,7 +119,7 @@ $(function () {
 
         projector = new THREE.Projector();
 
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1 } );
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -282,6 +282,48 @@ $(function () {
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
+        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+        projector.unprojectVector( vector, camera );
+
+        var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
+
+        var intersects = ray.intersectObjects( [particleSystem] );
+
+        if ( intersects.length > 0 ) {
+
+            if ( INTERSECTED != intersects[ 0 ].vertex ) {
+
+                INTERSECTED = intersects[ 0 ].vertex;
+
+                var particleData = particleSystem.geometry.vertices[INTERSECTED];
+                var isActive;
+
+                if( $('#selectedTweet').hasClass('active') ) {
+                    isActive = true;
+                } else {
+                    isActive = false;
+                }
+
+                renderTweetInfo.tweetContent(particleData, isActive);
+
+            }
+
+        } else if ( INTERSECTED !== null ) {
+
+            console.log('NULL');
+
+            INTERSECTED = null;
+
+            renderTweetInfo.tweetContent('', false);
+
+        }
+
+    }
+
+    function onDocumentMouseMove(event) {
+        event.preventDefault();
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;;
     }
 
     function animate() {
@@ -347,37 +389,19 @@ $(function () {
 
         var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
 
-//        ray.setOrigin( camera.position ).setDirection( vector.subSelf( camera.position ).normalize() );
-
         var intersects = ray.intersectObjects( [particleSystem] );
 
         if ( intersects.length > 0 ) {
 
             if ( INTERSECTED != intersects[ 0 ].vertex ) {
 
-                attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
-
                 INTERSECTED = intersects[ 0 ].vertex;
-
-                var particleData = particleSystem.geometry.vertices[INTERSECTED];
-                var isActive;
-
-                if( $('#selectedTweet').hasClass('active') ) {
-                    isActive = true;
-                } else {
-                    isActive = false;
-                }
-
-                renderTweetInfo.tweetContent(particleData, isActive);
 
             }
 
         } else if ( INTERSECTED !== null ) {
 
-            console.log('NULL');
-
             INTERSECTED = null;
-            renderTweetInfo.tweetContent('', false);
 
         }
 
@@ -387,6 +411,7 @@ $(function () {
 
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+//    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
     init();
     animate();
