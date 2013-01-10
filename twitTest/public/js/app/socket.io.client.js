@@ -26,19 +26,30 @@ function socketClient() {
     isStreamActive = true;
   });
 
+  socket.on('startStreaming', function(data){
+    _.each(data.statuses, function(val, key){
+      var profile_template = _.template($("#post-twitter-preview-template").html());
+      val.divcount = twitCount;
+      $("#streamingList").prepend(profile_template(twitterFriendly(val)));
+      $(".twitonstream").fadeIn();
+      if (twitCount > 7) {
+        var counter = twitCount-6;
+        $("#divcount"+counter).remove();
+      }
+      twitCount++
+    });
+  });
+
   socket.on('addTwet', function(data) {
-    //console.log('twitt received', data);
+    console.log('twitt received', data);
     if (data.text != null) {
       $("#count").html(twitCount++);
       if (layout_output == 1) {
         $("#streamingList").append("<div class='twitonstream'> - "+ data.text +"</div>");
       } else if (layout_output == 2) {
         var profile_template = _.template($("#post-twitter-preview-template").html());
-        // format text twitter-friendly
-        //console.log(twitterFriendly(data));
         data.divcount = twitCount;
         $("#streamingList").prepend(profile_template(twitterFriendly(data)));
-        //console.log($(".twitonstream")[5]);
         $(".twitonstream").fadeIn();
         if (twitCount > 7) {
           var counter = twitCount-6;
@@ -53,10 +64,7 @@ function socketClient() {
 
 
 
-// EMIT EXAMPLE
-//function doSomeAction(vars){
-//  socket.emit('typeOfAction', vars);
-//}
+
 
 /*EMIT REQUEST FOR SERVER NODE - IO*/
 function requestClient(socket) {
@@ -67,10 +75,6 @@ function requestClient(socket) {
     setTimeout(function(){socket.emit('reqnick', $("#twittnick").val());}, 50);
   });
 
-//  $("#testTweet").on('click', function(e){
-//    socket.emit('testStream');
-//  })
-
 }
 
 
@@ -79,7 +83,6 @@ function twitterFriendly(data) {
 
   console.log(data.entities);
 
-  //data.text("Microsoft","W3Schools");
   _.each(data.entities.hashtags, function(val, key){
     data.text = data.text.replace("#"+val.text, "<span class='tw-hashtag'>#"+val.text+"</span> ");
   });

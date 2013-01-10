@@ -18,7 +18,7 @@
 
 var express = require("express");
 var io = require('socket.io');
-var twitter = require('ntwitter');
+var twitter = require('twit');
 
 
 var app = express()
@@ -47,44 +47,69 @@ server.listen(3000);
 var twit = new twitter({
   consumer_key:'cy9k3PN1bL9zqXR9rZJ6Fw',
   consumer_secret:'wsQhQrDAbfJousnjO0XSfBgdqiOFwhieejKBc6Qsk',
-  access_token_key:'719832314-c0bDUILSAh7l7oSXgSTZbqZbMVrBPfwSTbyaJUfd',
+  access_token:'719832314-c0bDUILSAh7l7oSXgSTZbqZbMVrBPfwSTbyaJUfd',
   access_token_secret:'wQs4X0GWhPf3mQCzkDHpuD6UES5R3wvdWLLJXLBM'
 });
-
-/*Socket.IO listener actions*/
-twit.verifyCredentials(function(data) {
-    console.log(data);
-  }).updateStatus('Test tweet from node-twitter/' + twitter.VERSION,
-  function(data) {
-    console.log(data);
-  }
-);
 
 // launch the twitter streaming
 var defaultnick = "barackobama";
 /*Open new stream*/
-var twitStream;
-startStreaming(defaultnick); // <--- start streaming with barackObama
+var stream = twit.stream('statuses/filter', { track: defaultnick })
+startStreaming(); // <--- start streaming with barackObama
+
+
+// twit streaming listening for new tweet
+function startStreaming() {
+  stream.on('tweet', function (tweet) {
+    io.sockets.emit('addTwet', formatOutput(tweet));
+  })
+}
+
+var webGl = false;
+function formatOutput(tweet) {
+  if (webGl) {
+    console.log(tweet);
+
+    var glTweet = {};
+    glTweet._id = tweet.id;
+    glTweet.followers = tweet.user.followers_count;
+    glTweet.text = tweet.text;
+    glTweet.user = tweet.user.name;
+
+    return glTweet;
+  } else {
+    return tweet;
+  }
+}
 
 
 // client connected
 io.sockets.on('connection', function (socket) {
   console.log("client connected");
 
+  stream.stop();
+  twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
+    socket.emit('startStreaming', formatOutput(reply));
+    stream = twit.stream('statuses/filter', { track: defaultnick });
+    startStreaming();
+  })
+
   socket.on('reqnick', function (nickname) {
     console.log('received request : reqnick -> ', nickname);
     // we tell the client to execute 'update Server status' with 1 parameters
     socket.emit('updatestatus', nickname);
     socket.broadcast.emit('updatestatus', nickname);
-    twitStream.destroy();
-    setTimeout(function() { startStreaming(nickname) }, 100);
 
-  });
+    defaultnick = nickname;
 
-// close streaming
-  socket.on('closeStream', function(){
-    console.log('--------- CLOSE STREAMING ------------');
-    twitStream.destroy();
+    twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
+      socket.emit('startStreaming', formatOutput(reply));
+      socket.broadcast.emit('startStreaming', formatOutput(reply));
+    })
+
+    stream.stop(); // stop the precedent stream
+    stream = twit.stream('statuses/filter', { track: nickname }); // assign new search
+    startStreaming();
   });
 
 // client disconnected
@@ -93,22 +118,3 @@ io.sockets.on('connection', function (socket) {
   });
 
 });
-
-
-function startStreaming (nickname) {
-  twit.stream('user', {track:nickname}, function(stream) {
-    twitStream = stream;
-    stream.on('data', function (data) {
-      //console.log(data);
-      io.sockets.emit('addTwet', data);
-    });
-    stream.on('end', function (response) {
-      // Handle a disconnection
-    });
-    stream.on('destroy', function (response) {
-      // Handle a 'silent' disconnection from Twitter, no end/error event fired
-    });
-
-    //setTimeout(function() {stream.destroy; twStreaming(io.sockets)}, 15000);
-  });
-}
