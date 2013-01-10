@@ -106,7 +106,7 @@ $(function () {
 
     function init() {
 
-        ray = new THREE.Ray();
+//        ray = new THREE.Ray();
 
         camera = new THREE.PerspectiveCamera( 40, WIDTH / HEIGHT, 1, 10000 );
         camera.position.z = 300;
@@ -326,7 +326,9 @@ $(function () {
         var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
         projector.unprojectVector( vector, camera );
 
-        ray.setOrigin( camera.position ).setDirection( vector.subSelf( camera.position ).normalize() );
+        var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
+
+//        ray.setOrigin( camera.position ).setDirection( vector.subSelf( camera.position ).normalize() );
 
         var intersects = ray.intersectObjects( [particleSystem] );
 
@@ -352,6 +354,8 @@ $(function () {
             }
 
         } else if ( INTERSECTED !== null ) {
+
+            console.log('NULL');
 
             INTERSECTED = null;
             renderTweetInfo.tweetContent('', false);
