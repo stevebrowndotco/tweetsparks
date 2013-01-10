@@ -118,7 +118,7 @@ $(function () {
 
         projector = new THREE.Projector();
 
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1 } );
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -376,10 +376,7 @@ $(function () {
 
             if ( INTERSECTED != intersects[ 0 ].vertex ) {
 
-                attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
-
                 INTERSECTED = intersects[ 0 ].vertex;
-                $('document').css('cursor','pointer');
 
             }
 
