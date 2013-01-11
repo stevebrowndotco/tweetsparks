@@ -76,7 +76,7 @@ $(function () {
     var values_size = attributes.size.value;
     var values_color = attributes.customColor.value;
 
-    var radius = 10;
+    var radius = 0;
 
     for (var p = 0; p < particleCount; p++) {
 
@@ -86,8 +86,6 @@ $(function () {
         values_color[ p ] = new THREE.Color( 0xf6004f);
 
         particle.data = [];
-
-//        particle.multiplyScalar( radius );
 
         geometry.vertices.push(particle);
 
@@ -216,24 +214,36 @@ $(function () {
 
             if (blobCounter < geometry.vertices.length) {
 
-                var pX = Math.random() * 500 - 250,
-                    pY = Math.random() * 500 - 250,
-                    pZ = Math.random() * 500 - 250
+                var fX = Math.random() * 500 - 250,
+                    fY = Math.random() * 500 - 250,
+                    fZ = Math.random() * 500 - 250
 
+
+                var pX = 0,
+                    pY = 0,
+                    pZ = 0
+                     
                 var particle = geometry.vertices[blobCounter];
                 blobCounter++;
 
                 particle.x = pX;
                 particle.y = pY;
                 particle.z = pZ;
+                
+                console.log(fX,fY,fZ);
 
                 particle.data = item;
+                
+                particle.finalCo = { x: fX, y: fY, z: fZ };
+                
+                particle.animating = true;
 
-                values_size[blobCounter] = 64;
+                values_size[blobCounter] = 20;
 
                 values_color[blobCounter].setHSV(blobColor+ 0.4, blobColor+ 0.4, 0.8);
 
                 particleSystem.geometry.__dirtyVertices = true;
+
 
             }
 
@@ -333,7 +343,55 @@ $(function () {
     }
 
     function animate() {
+        
+    
+        _.each(particleSystem.geometry.vertices, function(val, key) {
+        
+            if(val.x > -9999) {
+            
+                if (val.finalCo.x < 0) {
+                    if (val.x > val.finalCo.x ) {
+                        val.x -= 1;
+                    }
+                } else {
+                    if (val.x < val.finalCo.x ) {
+                        val.x += 1;
+                    }
+                }
+                
+                if (val.finalCo.y < 0) {
+                    if (val.y > val.finalCo.y ) {
+                        val.y -= 1;
+                    }
+                } else {
+                    if (val.y < val.finalCo.y ) {
+                        val.y += 1;
+                    }
+                }
+                
+                if (val.finalCo.z < 0) {
+                    if (val.z > val.finalCo.z ) {
+                        val.z -= 1;
+                    }
+                } else {
+                    if (val.z < val.finalCo.z ) {
+                        val.z += 1;
+                    }
+                }
+                
+                if(values_size[key] < 64) {
+                    values_size[key] +=0.5;
+                }
+                
 
+                
+
+                                
+ 
+            }
+       
+        })
+        
         requestAnimationFrame(animate);
         render();
 
@@ -385,7 +443,7 @@ $(function () {
 //        camera.position.y = radius * Math.sin(theta * Math.PI / 360);
 //        camera.position.z = radius * Math.cos(theta * Math.PI / 360);
 
-        camera.lookAt(scene.position);
+/*         camera.lookAt(scene.position); */
 
         renderer.clear();
 

@@ -62,12 +62,18 @@ startStreaming(); // <--- start streaming with barackObama
 
 function checkUser() {
   twit.get('users/search', { q: defaultnick }, function(err, reply) {
-    for (var i = 0; i < reply.length; i++) {
-      var item = reply[i];
-      if (item.screen_name.toLowerCase() == defaultnick) {
-        userLockup.push(item);
+
+      if(!err) {
+          for (var i = 0; i < reply.length; i++) {
+              var item = reply[i];
+              if (item.screen_name.toLowerCase() == defaultnick) {
+                  userLockup.push(item);
+              }
+          }
+      } else {
+          console.log('No connection found!');
       }
-    }
+
   });
 }
 
