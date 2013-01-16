@@ -125,7 +125,7 @@ $(function () {
         scene.add(light);
 
         // Socket.IO listener and sender
-        var socket = io.connect('http://localhost:3000');
+        var socket = io.connect('http://tweetspark.theaudience.com:3000');
 
         scene.add(particleSystem);
 
