@@ -10,7 +10,6 @@ $(function () {
 
     //
 
-    var radius = 600;
     var theta = 0;
 
     //
@@ -39,6 +38,12 @@ $(function () {
     var sprite = THREE.ImageUtils.loadTexture( "/public/img/spark.png" );
 
     var geometry = new THREE.Geometry();
+
+//    var radius = 100, segments = 68, rings = 38;
+//
+//    var geometry = new THREE.SphereGeometry( radius, segments, rings );
+
+    console.log(geometry);
 
     var attributes, uniforms;
 
@@ -71,13 +76,10 @@ $(function () {
 
     });
 
-
     //
 
     var values_size = attributes.size.value;
     var values_color = attributes.customColor.value;
-
-    var radius = 0;
 
     for (var p = 0; p < particleCount; p++) {
 
@@ -96,6 +98,7 @@ $(function () {
 
     particleSystem.geometry.__dirtyVertices = true;
     particleSystem.geometry.__dirtyElements = true;
+    particleSystem.geometry.boundingSphere.radius = 300;
     particleSystem.geometry.verticesNeedUpdate = true;
     particleSystem.sortParticles = true;
     particleSystem.dynamic = true;
@@ -107,8 +110,6 @@ $(function () {
         camera.position.z = 300;
 
         scene = new THREE.Scene();
-
-//        scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
 
         projector = new THREE.Projector();
 
@@ -232,7 +233,9 @@ $(function () {
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
 
-            if (blobCounter < geometry.vertices.length) {
+            var particle = geometry.vertices[blobCounter];
+
+            if ((blobCounter +1)< geometry.vertices.length) {
 
                 var fX = Math.random() * 500 - 250,
                     fY = Math.random() * 500 - 250,
@@ -243,14 +246,12 @@ $(function () {
                     pY = 0,
                     pZ = 0
                      
-                var particle = geometry.vertices[blobCounter];
+
                 blobCounter++;
 
                 particle.x = pX;
                 particle.y = pY;
                 particle.z = pZ;
-                
-                console.log(fX,fY,fZ);
 
                 particle.data = item;
                 
@@ -262,13 +263,20 @@ $(function () {
 
                 values_color[blobCounter].setHSV(blobColor+ 0.4, blobColor+ 0.4, 0.8);
 
-                particleSystem.geometry.__dirtyVertices = true;
+
+            } else if (blobCounter > 0) {
+
+                blobCounter = 0;
+
+                particle.x = -99999;
+                particle.y = -0;
+                particle.z = -0;
+                particle.data = []
 
 
             }
 
         }
-
         this.destroy = function () {
 
             scene.remove(item);
@@ -344,6 +352,18 @@ $(function () {
 
                 renderTweetInfo.tweetContent(particleData, isActive);
 
+                //TODO camera looks at particle
+
+//                console.log(particleData)
+//
+//                console.log(camera.position);
+//
+//                camera.position.x = particleData.x;
+//                camera.position.y = particleData.y;
+
+                camera.updateProjectionMatrix();
+                renderer.clear();
+
             }
 
         } else {
@@ -363,12 +383,14 @@ $(function () {
     }
 
     function animate() {
+
+        particleSystem.geometry.computeBoundingSphere();
         
     
         _.each(particleSystem.geometry.vertices, function(val, key) {
-        
-            if(val.x > -9999) {
-            
+
+            if(val.x > -9999 && val.finalCo) {
+
                 if (val.finalCo.x < 0) {
                     if (val.x > val.finalCo.x ) {
                         val.x -= 1;
@@ -378,7 +400,7 @@ $(function () {
                         val.x += 1;
                     }
                 }
-                
+
                 if (val.finalCo.y < 0) {
                     if (val.y > val.finalCo.y ) {
                         val.y -= 1;
@@ -388,7 +410,7 @@ $(function () {
                         val.y += 1;
                     }
                 }
-                
+
                 if (val.finalCo.z < 0) {
                     if (val.z > val.finalCo.z ) {
                         val.z -= 1;
@@ -398,18 +420,13 @@ $(function () {
                         val.z += 1;
                     }
                 }
-                
+
                 if(values_size[key] < 64) {
                     values_size[key] +=0.5;
                 }
-                
 
-                
-
-                                
- 
             }
-       
+
         })
         
         requestAnimationFrame(animate);
@@ -463,8 +480,7 @@ $(function () {
 //        camera.position.y = radius * Math.sin(theta * Math.PI / 360);
 //        camera.position.z = radius * Math.cos(theta * Math.PI / 360);
 
-/*         camera.lookAt(scene.position); */
-
+        camera.lookAt(scene.position);
         renderer.clear();
 
         //
@@ -477,8 +493,6 @@ $(function () {
         var intersects = ray.intersectObjects(scene.children);
 
         if (intersects.length > 0) {
-
-            console.log('intersected!');
 
             particleSystem.rotation.y += 0.001;
             particleSystem.rotation.x += 0.001;
