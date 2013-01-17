@@ -1,8 +1,8 @@
 /**
  * Created with JetBrains WebStorm.
  * User: enzodonofrio
- * Date: 07/01/2013
- * Time: 10:58
+ * Date: 16/01/2013
+ * Time: 12:33
  * To change this template use File | Settings | File Templates.
  */
 
@@ -34,47 +34,38 @@ app.get('/', function (req, res) {
 server.listen(3000);
 
 
-/* nTwitter */
-// initialize
+/* node Twitter */
+// initialize production
+//var twit = new twitter({
+//  consumer_key:'cy9k3PN1bL9zqXR9rZJ6Fw',
+//  consumer_secret:'wsQhQrDAbfJousnjO0XSfBgdqiOFwhieejKBc6Qsk',
+//  access_token:'719832314-c0bDUILSAh7l7oSXgSTZbqZbMVrBPfwSTbyaJUfd',
+//  access_token_secret:'wQs4X0GWhPf3mQCzkDHpuD6UES5R3wvdWLLJXLBM'
+//});
+// initialize dev
 var twit = new twitter({
-  consumer_key:'cy9k3PN1bL9zqXR9rZJ6Fw',
-  consumer_secret:'wsQhQrDAbfJousnjO0XSfBgdqiOFwhieejKBc6Qsk',
-  access_token:'719832314-c0bDUILSAh7l7oSXgSTZbqZbMVrBPfwSTbyaJUfd',
-  access_token_secret:'wQs4X0GWhPf3mQCzkDHpuD6UES5R3wvdWLLJXLBM'
-});
+  consumer_key:'6FzFeYv6LDFHXemQxj54Q',
+  consumer_secret:'yn5IH7tiJiAfFVoXD6tEncx84obCRcU4MeuHKy2FdTE',
+  access_token:'719832314-3ujUuM4hTKZbXZLlQoo3lrckaDmCW9exKudfZFfJ',
+  access_token_secret:'LBwQrWvpGKw6d2CrUzUOZ0ygt44ZnggLDXKu6tRH36k'
+})
 
-// launch the twitter streaming
-var defaultnick = "barackobama";
 var userLockup = new Array();
-checkUser();
-/*Open new stream*/
-var stream = twit.stream('statuses/filter', { track: defaultnick });
-startStreaming(); // <--- start streaming with barackObama
-
-
-function checkUser() {
-  twit.get('users/search', { q: defaultnick }, function(err, reply) {
-
-      if(!err) {
-          for (var i = 0; i < reply.length; i++) {
-              var item = reply[i];
-              if (item.screen_name.toLowerCase() == defaultnick) {
-                  userLockup.push(item);
-              }
-          }
-      } else {
-          console.log('No connection found!');
-      }
-
-  });
-}
+var stream = twit.stream('statuses/sample');
+startStreaming(); // <--- start streaming
 
 // twit streaming listening for new tweet
 function startStreaming() {
   stream.on('tweet', function (tweet) {
+//    if (tweet.user != undefined) {
+//      io.sockets.broadcast.to(tweet.user).emit('tweets', formatOutput(tweet));
+//    }
+    //io.sockets.broadcast.to(tweet.user).emit('tweets', formatOutput(tweet));
     io.sockets.emit('tweets', formatOutput(tweet));
   })
 }
+
+// io.sockets.emit('tweets', formatOutput(tweet));
 
 var webGl = true;
 function formatOutput(tweet) {
@@ -103,11 +94,8 @@ function formatOutput(tweet) {
   }
 }
 
-
 function normalizeImg(img) {
-
   var normalized = img.replace('_replace', '');
-
   return normalized;
 };
 
@@ -116,32 +104,31 @@ function normalizeImg(img) {
 io.sockets.on('connection', function (socket) {
   console.log("client connected");
 
-  socket.emit('userStartLockup', userLockup);
-  stream.stop();
-  twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
-    if (reply.statuses) {
-      for (var i = 0; i < reply.statuses.length; i++) {
-        element = reply.statuses[i];
-        socket.emit('startStreaming', formatOutput(element));
-        socket.broadcast.emit('startStreaming', formatOutput(element));
-      }
-    }
-    stream = twit.stream('statuses/filter', { track: defaultnick });
-    startStreaming();
-  })
+  socket.on('adduser', function(userid, streamRoom){
+    // store the username in the socket session for this client
+    socket.username = userid;
+    // store the room name in the socket session for this client
+    socket.room = streamRoom;
+    // send client to room 1
+    socket.join(streamRoom);
 
+  });
+
+  /* request last 10 twitter of client */
   socket.on('reqnick', function (nickname) {
     console.log('received request : reqnick -> ', nickname);
-    // we tell the client to execute 'update Server status' with 1 parameters
 
-    defaultnick = nickname;
+    // update room for receive broadcast
+    socket.leave(socket.room);
+    socket.join(nickname);
+    // update socket session room title
+    socket.room = nickname;
 
-    stream.stop(); // stop the precedent stream
-
-    twit.get('users/search', { q: defaultnick }, function(err, reply) {
+    stream.stop();
+    twit.get('users/search', { q: nickname }, function(err, reply) {
       for (var i = 0; i < reply.length; i++) {
         var item = reply[i];
-        if (item.screen_name.toLowerCase() == defaultnick) {
+        if (item.screen_name.toLowerCase() == nickname) {
           userLockup[0] = item;
           socket.emit('userStartLockup', userLockup);
           socket.broadcast.emit('userStartLockup', userLockup);
@@ -149,7 +136,7 @@ io.sockets.on('connection', function (socket) {
       }
     });
 
-    twit.get('search/tweets', { q: defaultnick }, function(err, reply) {
+    twit.get('search/tweets', { q: nickname }, function(err, reply) {
       if (reply.statuses) {
         for (var i = 0; i < reply.statuses.length; i++) {
           element = reply.statuses[i];
@@ -157,15 +144,19 @@ io.sockets.on('connection', function (socket) {
           socket.broadcast.emit('startStreaming', formatOutput(element));
         }
       }
-      stream = twit.stream('statuses/filter', { track: nickname }); // assign new search
+      stream = twit.stream('statuses/sample');
       startStreaming();
+      //setTimeout(function(){ stream.stop(); }, 2000);
     });
 
   });
 
+
 // client disconnected
   socket.on('disconnect', function() {
     console.log('client disconnected');
+    socket.leave(socket.room);
   });
 
 });
+

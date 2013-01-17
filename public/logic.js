@@ -2,6 +2,7 @@ $(function () {
 
     var blobCounter = 0;
     var searchname = undefined;
+    var local_id = guidGenerator();
     var container;
     var camera, scene, projector, renderer, ray;
 
@@ -124,21 +125,31 @@ $(function () {
         scene.add(light);
 
         // Socket.IO listener and sender
-        var socket = io.connect('http://tweetspark.theaudience.com:3000');
+        // var socket = io.connect('http://tweetspark.theaudience.com:3000'); // PRODUCTION
+        var socket = io.connect('http://localhost:3000'); // DEVELOP
+
+        socket.on('connect', function(){
+          searchname = 'barackobama';
+          socket.emit('adduser', local_id, 'barackobama');
+          socket.emit('reqnick', 'barackobama'); // barackObama default
+        });
 
         scene.add(particleSystem);
 
         // ---- IO.LISTENER ----
         socket.on('tweets', function (data) {
+
+          if (data.text.toLowerCase().search(searchname) != -1) {
+            console.log('tweet '+searchname, data);
             createBlob(data);
+          }
+
         });
 
 
         socket.on('userLockup', function(data, error){
-//            console.log('startStreaming', data, error);
             _.each(data, function(val, key){
                 if (val.screen_name.toLowerCase() == searchname) {
-
                   changeUser(val);
                 }
             });
@@ -150,6 +161,8 @@ $(function () {
         })
 
         socket.on('startStreaming', function(data){
+//          console.log('tweet on start', data);
+//          console.log(data.text.toLowerCase().search(searchname), searchname);
           createBlob(data);
         });
 
@@ -203,6 +216,13 @@ $(function () {
       $("#description").html(data.description);
       $("#location").html(data.location);
       $("#followers").html(data.followers_count);
+    }
+
+    function guidGenerator() {
+      var S4 = function() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+      };
+      return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
     }
 
     function Blob(item) {
