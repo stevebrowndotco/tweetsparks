@@ -141,7 +141,7 @@ $(function () {
         socket.on('tweets', function (data) {
 
           if (data.text.toLowerCase().search(searchname) != -1) {
-            console.log('tweet '+searchname, data);
+//            console.log('tweet '+searchname, data);
             createBlob(data);
           }
 
@@ -157,7 +157,7 @@ $(function () {
         });
 
         socket.on('userStartLockup', function(data, error){
-          console.log('userStartLockup', data, error);
+//          console.log('userStartLockup', data, error);
           changeUser(data[0]);
         })
 
@@ -196,7 +196,7 @@ $(function () {
 
         blobCounter = 0;
 
-        console.log(searchname,particleSystem);
+//        console.log(searchname,particleSystem);
 
         _.each(particleSystem.geometry.vertices, function(val, key){
 
@@ -229,6 +229,8 @@ $(function () {
     function Blob(item) {
 
         this.create = function (item) {
+
+//            console.log(item);
 
             var blobSize = item.followers;
             var blobColor = getImportanceColor(item.followers);
@@ -303,8 +305,10 @@ $(function () {
 
                 var userImage = item.data.image;
 
-                $('#selectedTweet .userDetails h2').html(item.data.name);
-                $('#selectedTweet .userDetails p').html(item.data.name);
+                console.log(item.data);
+
+                $('#selectedTweet .tweetContents h2').html('<a href="http://twitter.com/'+item.data.original.user.screen_name+'/status/'+item.data.original.id_str+'" target="_blank">'+item.data.user+'</a>');
+                $('#selectedTweet .tweetContents p#screen-name').html(item.data.original.user.screen_name);
                 $('#selectedTweet .tweetContents p#tweetCopy').html(item.data.text);
                 $('#selectedTweet .tweetContents p#when').html(item.data.created_at);
                 $('#selectedTweet .userDetails .user-avatar').attr('style','background-image: url('+userImage+')');
