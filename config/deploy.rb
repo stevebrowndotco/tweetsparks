@@ -20,7 +20,7 @@ set :deploy_via, :remote_cache
 
 task :production do
 #  chef_role :web, 'roles:generalweb', :attribute => Proc.new { |n| n['ec2']['public_hostname'] }
-  role :web, "23.22.101.29"                          # Your HTTP server, Apache/etc
+  role :web, "107.21.132.176"                          # Your HTTP server, Apache/etc
 end 
 
 # if you want to clean up old releases on each deploy uncomment this:
