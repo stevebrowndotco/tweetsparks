@@ -126,8 +126,8 @@ $(function () {
         scene.add(light);
 
         // Socket.IO listener and sender
-        // var socket = io.connect('http://tweetspark.theaudience.com:3000'); // PRODUCTION
-        var socket = io.connect('http://localhost:3000'); // DEVELOP
+         var socket = io.connect('http://tweetspark.theaudience.com:3000'); // PRODUCTION
+        //var socket = io.connect('http://localhost:3000'); // DEVELOP
 
         socket.on('connect', function(){
           searchname = 'barackobama';
